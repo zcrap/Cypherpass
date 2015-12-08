@@ -54,5 +54,5 @@ passwords to third parties.
 - Rate limit auto login
 - In browser extension unit testing.
 
-Cypherpass proudly uses the crypto library from
-https://github.com/kjur/jsrsasignS
+Cypherpass proudly uses the jsrsasign library from
+https://github.com/kjur/jsrsasign

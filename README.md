@@ -21,7 +21,6 @@ passwords to third parties.
  - Sometimes better than lazy, security unconcerned users reusing passwords
    and blinding trusting websites with password security.
 
-
 ## How does cypherpass work?
 - Cypherpass generates a public/private key pair in the browser and saves it to
   Google's cloud storage syncing all instances.
@@ -50,9 +49,10 @@ passwords to third parties.
 - Cypherpass will not autologin if the page is asking for public key.
 
 ### //TODO
-- Specify curve/crypto
-- Rate limit auto login
+- Specify crypto/curve.
+- Rate limit auto login.
 - In browser extension unit testing.
+- Manual import of keys.
 
 Cypherpass proudly uses the jsrsasign library from
 https://github.com/kjur/jsrsasign

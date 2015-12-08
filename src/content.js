@@ -16,10 +16,16 @@ var signatureInputFeild = "signature";
 
 
 
+//Default Values for Variable object
+//publicKey
+//privateKey
+//message
+//signed
+
 ///////////////////
 //Initial startup
 ///////////////////
-//Get saved settings and run rest of Cyphserpass
+//Get saved settings and run rest of Cypherpass
 get_saved(function (items) {
 	//for testing uncomment.
 //	items = {
@@ -156,11 +162,22 @@ function signMessage(items, callback) {
 	}
 }
 
-function verifyMessage() {
+
+function verifyMessage(items) {
 	var sig = new KJUR.crypto.Signature({"alg": sigalg, "prov": "cryptojs/jsrsa"});
-	sig.initVerifyByPublicKey({'ecpubhex': pubKey, 'eccurvename': curve});
-	sig.updateString(message);
-	return sig.verify(signature);
+	sig.initVerifyByPublicKey({'ecpubhex': items.publicKey, 'eccurvename': curve});
+	sig.updateString(items.message);
+	return sig.verify(items.signed);
+}
+
+
+function verifyKeyPair(items) {
+	if (!items.message) {
+		//TODO make this a random string.  
+		items.message = "testMessage";
+	}
+
+	return signMessage(items, verifyMessage);
 }
 
 

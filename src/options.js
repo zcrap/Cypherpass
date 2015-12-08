@@ -1,15 +1,33 @@
-function restore_options(items) {
+
+//Update the options page GUI to show the latest saved information
+function refresh_gui(callback) {
+	restore_options(null, callback);
+}
+
+
+
+function restore_options(items, callback) {
+
+	//Get saved options first, then set GUI.
 	items = get_saved(function (items) {
 		document.getElementById('autofill').checked = items.autofill;
 		document.getElementById('autologin').checked = items.autologin;
 		document.getElementById('publicKey').textContent = items.publicKey;
-	});
 
+		//callback or return
+		if (typeof callback === 'function') {
+			return callback(items)
+		} else {
+			return items;
+		}
+	});
 }
 
 
 function save_options() {
+
 	var items = {};
+
 	items.autofill = document.getElementById('autofill').checked;
 	items.autologin = document.getElementById('autologin').checked;
 
@@ -66,7 +84,7 @@ function newKeyPairDoubleCheck() {
 
 //Generate a new key pair.
 function newKeyPairOption() {
-	newKeyPair(null, restore_options);
+	newKeyPair(null, refresh_gui);
 	update_status('Saved new key pair');
 }
 
@@ -79,6 +97,31 @@ function show_private_key() {
 		set_blank_status();
 	});
 }
+
+//Manually import key pair.
+function import_key_pair() {
+	update_status('importing key pair....');
+
+	var items = {};
+
+	items.publicKey = document.getElementById('importPublicInput').value;
+	items.privateKey = document.getElementById('importPrivateInput').value;
+
+	var verified = verifyKeyPair(items);
+
+	if (verified) {
+		//Save the new key pair and update the options page.
+		save_settings(items, function () {
+			refresh_gui(update_status('Imported new key pair.'));
+		});
+	} else {
+		update_status('Invalide Key pair.  Pair not saved.  ')
+	}
+}
+
+
+
+
 
 
 /////////////
@@ -104,4 +147,8 @@ document.getElementById('newKeyPairDoubleCheck').addEventListener('click', newKe
 
 //Show the private key to the user
 document.getElementById('showPrivateKey').addEventListener("click", show_private_key);
+
+//Import key pair
+document.getElementById('importKeyPairButton').addEventListener("click", import_key_pair);
+
 

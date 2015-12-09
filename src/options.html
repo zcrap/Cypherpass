@@ -7,8 +7,13 @@
 			*{
 				word-wrap:break-word;
 			}
+
 			body{
 				word-wrap: break-word;
+			}
+
+			p{
+				margin:1px;
 			}
 
 			div{
@@ -47,6 +52,12 @@
 				font-weight: bold;
 				margin:0px;
 			}
+
+			label {
+				display: inline-block;
+				min-width: 140px;
+			}​
+
 
 		</style>
 	</head>
@@ -91,11 +102,13 @@
 					New Key Pair
 				</p>
 				<p>
+					<strong>WARNING:</strong>This will <strong>erase</strong>
+					the current key pair forever.
+				</p>
+				<p>
 					<label>
 						<input type="checkbox" id="newKeyPairDoubleCheck">
-						This will <strong>erase</strong>
-						the current key pair and accounts will need to be updated
-						with the new public key.
+						That's okay.
 					</label>
 				</p>
 				<p>
@@ -118,19 +131,21 @@
 					Import key pair
 				</p>
 				<p>
-					<label>
-						Public Key:
-						<input type="text" id="importPublicInput" value="04501f6b95c844732d6bb6fca355eb5af094e86c7508ac871f0f533ced9ca8a299b6b01587ff2639d0a6a90f96548a3cc401079e720a81010642061c2db0c1c329"/>
-					</label>
+					<label for='importPublicInput'> Public Key:</label>
+					<input type="text" id="importPublicInput" value=""/>
 				</p>
 				<p>
-					<label>
-						Private Key:
-						<input type="text" id="importPrivateInput" value="6336b5b775a69688bfcc03caf780fbd4278658ecbb560265eae3a021b021ac2f"/>
-					</label>
+					<label for='importPrivateInput'>Private Key:</label>
+					<input type="text" id="importPrivateInput" value=""/>
+
 				</p>
 
-				<button id="importKeyPairButton">Import Key Pair</button>
+				<p>
+					<strong>WARNING:</strong>This will <strong>erase</strong>
+					the current key pair forever.
+				</p>
+				<p>
+					<button id="importKeyPairButton">Import Key Pair</button>
 				</p>
 			</div>
 		</div>

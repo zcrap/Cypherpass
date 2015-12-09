@@ -7,11 +7,11 @@ var curve = "secp256k1";
 var sigalg = "SHA256withECDSA";
 
 //Autofill values
-var autofillFeildName = 'public_key'
+var autofillFeildName = 'public_key';
 
 //Auto login values
 var autoLoginFormName = "public_key_login";
-var formChallengeName = "signature_challenge";
+var formChallengeName = "challenge";
 var signatureInputFeild = "signature";
 
 
@@ -90,7 +90,7 @@ function generateKeys(items, callback) {
 
 	//callback or return
 	if (typeof callback === 'function') {
-		return callback(items)
+		return callback(items);
 	} else {
 		return items;
 	}
@@ -118,6 +118,7 @@ function autoLogin(items) {
 		return false;
 	}
 
+	//get the auto login form.
 	var form = document.getElementsByName(autoLoginFormName)[0];
 	if (form) {
 
@@ -130,7 +131,7 @@ function autoLogin(items) {
 				return items;
 			});
 
-			console.log(items.signed);
+			console.log("Signed message: " + items.signed);
 			inputFeild.value = items.signed + ":" + items.publicKey;
 			form.submit();
 		}
@@ -156,7 +157,7 @@ function signMessage(items, callback) {
 
 	//callback or return
 	if (typeof callback === 'function') {
-		return callback(items)
+		return callback(items);
 	} else {
 		return items;
 	}
@@ -173,7 +174,7 @@ function verifyMessage(items) {
 
 function verifyKeyPair(items) {
 	if (!items.message) {
-		//TODO make this a random string.  
+		//TODO make this a random string.
 		items.message = "testMessage";
 	}
 

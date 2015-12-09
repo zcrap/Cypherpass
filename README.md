@@ -31,9 +31,9 @@ passwords to third parties.
 
 ## How does autologin work?
 - Cypherpass looks for a form named `public_key_login`
-- Form should have an attribute named `signature_challenge`
-  with a randomly generated value (we suggest something a few bytes
-  long, like "a319237c42162360a711f6a3ef790625")
+- Form should have an attribute named `challenge` with a randomly generated
+  value (we suggest something a few bytes long, like
+  "a319237c42162360a711f6a3ef790625")
 - Cypherpass signs the value and inserts the newly created signature, concatenated
   with the public key delimited by `:`, into the form input named `signature`.
 - Cypherpass submits the form for login.
@@ -52,7 +52,6 @@ passwords to third parties.
 - Specify crypto/curve.
 - Rate limit auto login.
 - In browser extension unit testing.
-- Manual import of keys.
 
 Cypherpass proudly uses the jsrsasign library from
 https://github.com/kjur/jsrsasign

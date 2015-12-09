@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Cypherpass",
 	"description": "Public key authenticator.",
-	"version": "0.1",
+	"version": "0.0.0.1",
 	"short_name": "Cypherpass",
 	"content_scripts": [
 		{

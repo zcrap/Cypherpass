@@ -99,6 +99,17 @@
 			</p>
 			<div>
 				<p>
+					Show private key
+				</p>
+				<p>
+					<button id="showPrivateKey">Show Private Key</button>
+				</p>
+				<p>
+					<span id="privateKey"></span>
+				</p>
+			</div>
+			<div>
+				<p>
 					New Key Pair
 				</p>
 				<p>
@@ -115,20 +126,14 @@
 					<button id="newKeyPair" disabled>Generate a new key pair</button>
 				</p>
 			</div>
-			<div>
-				<p>
-					Show private key
-				</p>
-				<p>
-					<button id="showPrivateKey">Show Private Key</button>
-				</p>
-				<p>
-					<span id="privateKey"></span>
-				</p>
-			</div>
+
 			<div>
 				<p>
 					Import key pair
+				</p>
+				<p>
+					<strong>WARNING:</strong>This will <strong>erase</strong>
+					the current key pair forever.
 				</p>
 				<p>
 					<label for='importPublicInput'> Public Key:</label>
@@ -140,10 +145,7 @@
 
 				</p>
 
-				<p>
-					<strong>WARNING:</strong>This will <strong>erase</strong>
-					the current key pair forever.
-				</p>
+
 				<p>
 					<button id="importKeyPairButton">Import Key Pair</button>
 				</p>

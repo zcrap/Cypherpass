@@ -1,5 +1,6 @@
 * {
 	word-wrap:break-word;
+	font-family: sans-serif;
 }
 
 body {
@@ -10,11 +11,16 @@ p {
 	margin:1px;
 }
 
-div{
-	font-family: sans-serif;
+label {
+	display: inline-block;
+	min-width: 140px;
+}​
+
+div {
 	padding-left: 5px;
 	padding: 2px;
 	margin: 2px;
+
 }
 
 td {
@@ -30,11 +36,13 @@ td {
 	background-color: red;
 	padding: 5px;
 	padding-top:0px;
+	margin-top:10px;
 
 }
 .dangerzone>div{
-	background-color:pink;
-	border:1px;
+	background-color:#fff8fa;
+	margin:2px;
+	padding:5px;
 }
 .dangerzone>p span{
 	color: white;
@@ -43,10 +51,7 @@ td {
 }
 .dangerzone>div p:first-child{
 	font-weight: bold;
+	font-size: 125%;
 	margin:0px;
 }
 
-label {
-	display: inline-block;
-	min-width: 140px;
-}​

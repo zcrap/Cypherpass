@@ -13,6 +13,14 @@ function restore_options(items, callback) {
 		document.getElementById('autofill').checked = items.autofill;
 		document.getElementById('autologin').checked = items.autologin;
 		document.getElementById('publicKey').textContent = items.publicKey;
+		//Reset if showing private key.
+		var pricon = document.getElementById('privateKey').textContent;
+		if (pricon !== "" && pricon !== " ") {
+			document.getElementById('privateKey').textContent = items.privateKey;
+		} else {
+			document.getElementById('privateKey').textContent = "";
+		}
+
 
 		//callback or return
 		if (typeof callback === 'function') {
@@ -94,8 +102,15 @@ function show_private_key() {
 	update_status('Getting private key....');
 	get_saved(function (items) {
 		document.getElementById('privateKey').textContent = items.privateKey;
+		document.getElementById('showPrivateKey').style.display = 'none';
 		set_blank_status();
 	});
+}
+
+//show the private key reset
+function show_private_key_reset() {
+	document.getElementById('privateKey').textContent = "";
+	document.getElementById('showPrivateKey').style.display = 'initial';
 }
 
 //Manually import key pair.

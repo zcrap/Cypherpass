@@ -1,10 +1,16 @@
 
+
+//run only on the options page.
+if (document.title === "Cypherpass Options") {
+	option_page();
+}
+
+
+
 //Update the options page GUI to show the latest saved information
 function refresh_gui(callback) {
 	restore_options(null, callback);
 }
-
-
 
 function restore_options(items, callback) {
 
@@ -143,27 +149,29 @@ function import_key_pair() {
 //Page Events
 /////////////
 
+function option_page() {
 //Restore options when document is loaded.
-document.addEventListener('DOMContentLoaded', restore_options);
+	document.addEventListener('DOMContentLoaded', restore_options);
 
 //Auto save on checkboxes
-document.getElementById('autofill').addEventListener("change", save_options);
-document.getElementById('autologin').addEventListener("change", save_options);
+	document.getElementById('autofill').addEventListener("change", save_options);
+	document.getElementById('autologin').addEventListener("change", save_options);
 
 //Sign message
 //Sign on update
-document.getElementById('messageToSign').addEventListener("input", sign_message);
+	document.getElementById('messageToSign').addEventListener("input", sign_message);
 
 //New Keypair
 //Make sure the user knows what they are doing first.
-document.getElementById('newKeyPair').addEventListener('click', newKeyPairOption);
+	document.getElementById('newKeyPair').addEventListener('click', newKeyPairOption);
 //Actually do new keypair.
-document.getElementById('newKeyPairDoubleCheck').addEventListener('click', newKeyPairDoubleCheck);
+	document.getElementById('newKeyPairDoubleCheck').addEventListener('click', newKeyPairDoubleCheck);
 
 //Show the private key to the user
-document.getElementById('showPrivateKey').addEventListener("click", show_private_key);
+	document.getElementById('showPrivateKey').addEventListener("click", show_private_key);
 
 //Import key pair
-document.getElementById('importKeyPairButton').addEventListener("click", import_key_pair);
+	document.getElementById('importKeyPairButton').addEventListener("click", import_key_pair);
+}
 
 

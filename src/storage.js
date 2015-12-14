@@ -1,15 +1,17 @@
 
 // Gets all saved options
 // stored in chrome.storage.
+// Returns all the saved options.
 function get_saved(callback) {
 	chrome.storage.sync.get(
-			//Key:value pair. Saved will overwrite preset value.
+			//object with Key:value pair of settings.
+			//Saved will overwrite preset value.
 			get_defaults(),
-			//callback
+			//callback or return
 					function (items) {
 						//callback or return
 						if (typeof callback === 'function') {
-							callback(items);
+							return callback(items);
 						} else {
 							return items;
 						}
@@ -48,6 +50,7 @@ function get_defaults(items) {
 		publicKey: false,
 		autofill: true,
 		autologin: true
+
 	};
 
 	return presets;

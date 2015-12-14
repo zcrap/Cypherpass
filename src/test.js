@@ -10,12 +10,16 @@ function runTests() {
 
 
 	add_test_report({
-		"name": "Test of the test function",
+		"name": "Test function.",
 		"passed": true,
-		"message": "Test report is working."
+		"message": "Test messsages go here."
 	});
 
-	test_get_saved();
+	get_saved(function (items) {
+		test_get_saved(add_test_report);
+		test_signing(items, add_test_report);
+		test_saving(add_test_report);
+	});
 
 
 }
@@ -36,8 +40,14 @@ function add_test_report(test) {
 	}
 
 	if (test.message !== "undefined") {
-		var message = document.createElement("pre")
-		message.appendChild(document.createTextNode(JSON.stringify(test.message, null, 4)));
+		var message = document.createElement("pre");
+		if (typeof test.message === "object") {
+			message.appendChild(document.createTextNode(JSON.stringify(test.message, null, 4)));
+		} else {
+			message.appendChild(document.createTextNode(test.message));
+		}
+
+
 		div.appendChild(message);
 	}
 
@@ -53,7 +63,7 @@ function new_test(name) {
 	return {
 		"name": name,
 		"passed": false,
-		"message": ""
+		"message": ''
 	};
 }
 
@@ -62,7 +72,7 @@ function new_test(name) {
 /////////////////
 //tests
 /////////////////
-function test_get_saved() {
+function test_get_saved(callback) {
 	var test = new_test("Saved variables");
 
 	get_saved(function (items) {
@@ -77,15 +87,17 @@ function test_get_saved() {
 			test.passed = true;
 		}
 
-		add_test_report(test);
+		callback(test);
 	});
 }
 
-function test_signing() {
+function test_signing(items, callback) {
 	var test = new_test("Valid signature");
+	verifyKeyPair(items);
+	callback(test);
 }
 
-
-
-
-
+function test_saving(callback) {
+	var test = new_test("Saving variables");
+	callback(test);
+}

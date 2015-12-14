@@ -174,8 +174,7 @@ function verifyMessage(items) {
 
 function verifyKeyPair(items) {
 	if (!items.message) {
-		//TODO make this a random string.
-		items.message = "testMessage";
+		items.message = Math.random();
 	}
 
 	return signMessage(items, verifyMessage);

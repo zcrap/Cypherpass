@@ -88,6 +88,15 @@ function generateKeys(items, callback) {
 	items.privateKey = keypair.ecprvhex;
 	items.publicKey = keypair.ecpubhex;
 
+	//Verify the newly generated key pair
+	var verified = verifyKeyPair(items);
+
+	//If not verified, throw new error
+	if (!verified) {
+		throw "Newly generated key pair was invalid.  \n\
+				Something is wrong.";
+	}
+
 	//callback or return
 	if (typeof callback === 'function') {
 		return callback(items);
@@ -163,7 +172,8 @@ function signMessage(items, callback) {
 	}
 }
 
-
+//verify message
+//Returns boolean
 function verifyMessage(items) {
 	var sig = new KJUR.crypto.Signature({"alg": sigalg, "prov": "cryptojs/jsrsa"});
 	sig.initVerifyByPublicKey({'ecpubhex': items.publicKey, 'eccurvename': curve});
@@ -171,12 +181,14 @@ function verifyMessage(items) {
 	return sig.verify(items.signed);
 }
 
-
+//Verify keypair by attempting to sign message and verifying it.
+//Returns boolean value.
 function verifyKeyPair(items) {
 	if (!items.message) {
 		items.message = Math.random();
 	}
 
+	//Returns boolean
 	return signMessage(items, verifyMessage);
 }
 

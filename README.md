@@ -24,7 +24,7 @@ passwords to third parties.
 ## How does cypherpass work?
 * Cypherpass generates a public/private key pair in the browser and saves it to
   Google's cloud storage syncing all instances.
-* Supporting websites must first associate the user's public key with their login.
+* Supporting websites first associate user's public key with their login.
 * When offering authenticating, a website generates a random token.
 * Cypherpass signs the token and sends it back with the public key.
 * The website verifies the signature thereby authenticating the user.
@@ -34,8 +34,9 @@ passwords to third parties.
 * Form should have an attribute named `challenge` with a randomly generated
   value (we suggest something a few bytes long, like
   "a319237c42162360a711f6a3ef790625")
-* Cypherpass signs the value and inserts the newly created signature, concatenated
-  with the public key delimited by `:`, into the form input named `signature`.
+* Cypherpass signs the value and inserts the newly created signature,
+  concatenated with the public key delimited by `:`, into the form input
+  named `signature`.
 * Cypherpass submits the form for login.
 
 ### Hopes
@@ -48,16 +49,22 @@ passwords to third parties.
 * Autofill forms with a type, "public_key"
 * Cypherpass will not autologin if the page is asking for public key.
 
-### Known Issues
-* Chrome's storage area isn't encrypted meaning sensitive information is stored in plaintext.
+### Known Issues And Concerns
+* Chrome's storage area isn't encrypted meaning sensitive information is
+  stored in plaintext.
 
 ### //TODO
 * In browser extension unit testing.
 * Support multiple crypto suites.
 * Rate limit auto login, allow user to configure this in options page.
-* Options page: Add an area to manually verify signatures.
-* Options page: Encrypt stored variables
+* Option: Add an area to manually verify signatures.
+
+### Wishlist
+* Option: Encrypt stored variables.
   * Javascript to encrypt, unencrypt using a password.
+* Option: New keypair for each login.
+  * Would need workaround from chrome storage constraint.
+* Support for client side certificates.
 
 Cypherpass proudly uses the jsrsasign library from
 https://github.com/kjur/jsrsasign

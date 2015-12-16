@@ -27,7 +27,6 @@ function restore_options(items, callback) {
 			document.getElementById('privateKey').textContent = "";
 		}
 
-
 		//callback or return
 		if (typeof callback === 'function') {
 			return callback(items)
@@ -140,6 +139,11 @@ function import_key_pair() {
 	}
 }
 
+//test link
+function test_page() {
+	chrome.tabs.create({url: "src/test.html"});
+}
+
 
 
 
@@ -173,5 +177,8 @@ function option_page() {
 //Import key pair
 	document.getElementById('importKeyPairButton').addEventListener("click", import_key_pair);
 }
+
+//Test page
+document.getElementById('testPage').addEventListener('click', test_page);
 
 

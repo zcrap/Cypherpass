@@ -55,3 +55,7 @@ td {
 	margin:0px;
 }
 
+input[type="text"] {
+	height: 10px;
+	width: 400px;
+}

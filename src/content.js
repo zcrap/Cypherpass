@@ -15,51 +15,62 @@ var formChallengeName = "challenge";
 var signatureInputFeild = "signature";
 
 
-
 //Default Values for Variable object
+//
 //publicKey
 //privateKey
 //message
 //signed
+//autologin
+//autofill
 
 ///////////////////
 //Initial startup
 ///////////////////
+start();
+
 //Get saved settings and run rest of Cypherpass
-get_saved(function (items) {
-	//for testing uncomment.
-//	items = {
-//		privateKey: false,
-//		publicKey: false,
-//		autofill: true,
-//		autologin: true};
+function start(callback) {
+	//get saved options.
+	get_saved(function (items) {
 
-	//Do we have saved settings?
-	//If empty, we havn't saved yet.
-	//
-	//Make sure "items" is initilized first with empty values.
-	//running "get_saved" first initilizes empty "items"
-	if (!items.privateKey || !items.publicKey) {
-		console.log(
-				"Unable to retreive key pair.",
-				"Generating and saving new key."
-				);
-		//Generate new keypair and run.
-		items = newKeyPair(items, run);
-	} else {
-		//Settings have been loaded.
-		//Run the rest of Cypherpass
-		run(items);
-	}
+		//Do we have saved settings?
+		//If empty, we havn't saved yet.
+		//
+		//Make sure "items" is initilized first with empty values.
+		//running "get_saved" first initilizes empty "items"
+		if (!items.privateKey || !items.publicKey) {
+			console.log(
+					"Unable to retreive key pair.",
+					"Generating and saving new key."
+					);
+			//Generate new keypair and run.
+			items = newKeyPair(items, function (items) {
+				run(items, callback);
+			});
+		} else {
+			//Settings have been loaded.
+			//Run the rest of Cypherpass
+			run(items, callback);
+		}
 
-});
+	});
+}
 
-//Run the plugin options.
+
+//Run the plugin actions.
 function run(items, callback) {
 	//Don't auto login if asking for public key.
 	if (!autoFill(items)) {
 		//perform autologin
 		autoLogin(items);
+	}
+
+	//callback or return
+	if (typeof callback === 'function') {
+		return callback(items);
+	} else {
+		return items;
 	}
 }
 
@@ -76,7 +87,7 @@ function newKeyPair(items, callback) {
 	items.publicKey = "";
 
 	//Generate new keys and save them.
-	save_settings(generateKeys(items), callback);
+	return save_settings(generateKeys(items), callback);
 }
 
 //generate new key pair.

@@ -6,6 +6,12 @@ if (document.title === "Cypherpass Options") {
 }
 
 
+function initialize() {
+	//Run the main start.
+	//This will initilize any empt options.
+	//Then restore the otions page.
+	start(restore_options);
+}
 
 //Update the options page GUI to show the latest saved information
 function refresh_gui(callback) {
@@ -27,6 +33,16 @@ function restore_options(items, callback) {
 			document.getElementById('privateKey').textContent = "";
 		}
 
+		//Reset signature
+		//Only sign if there is a value.
+		//Otherwise, ensure value is empty.  
+		if (document.getElementById('messageToSign').value !== '') {
+			//items.signed
+			sign_message();
+		} else {
+			document.getElementById('signature').textContent = "";
+		}
+
 		//callback or return
 		if (typeof callback === 'function') {
 			return callback(items)
@@ -35,6 +51,8 @@ function restore_options(items, callback) {
 		}
 	});
 }
+
+
 
 
 function save_options() {
@@ -154,31 +172,34 @@ function test_page() {
 /////////////
 
 function option_page() {
-//Restore options when document is loaded.
-	document.addEventListener('DOMContentLoaded', restore_options);
+	//Restore options when document is loaded.
+	//TODO loaded should happen, then everything else.
+	document.addEventListener('DOMContentLoaded', initialize);
 
-//Auto save on checkboxes
+	//Auto save on checkboxes
 	document.getElementById('autofill').addEventListener("change", save_options);
 	document.getElementById('autologin').addEventListener("change", save_options);
 
-//Sign message
-//Sign on update
+	//Sign message
+	//Sign on update
 	document.getElementById('messageToSign').addEventListener("input", sign_message);
 
-//New Keypair
-//Make sure the user knows what they are doing first.
+	//New Keypair
+	//Make sure the user knows what they are doing first.
 	document.getElementById('newKeyPair').addEventListener('click', newKeyPairOption);
-//Actually do new keypair.
+	//Actually do new keypair.
 	document.getElementById('newKeyPairDoubleCheck').addEventListener('click', newKeyPairDoubleCheck);
 
-//Show the private key to the user
+	//Show the private key to the user
 	document.getElementById('showPrivateKey').addEventListener("click", show_private_key);
 
-//Import key pair
+	//Import key pair
 	document.getElementById('importKeyPairButton').addEventListener("click", import_key_pair);
+
+	//Test page
+	document.getElementById('testPage').addEventListener('click', test_page);
 }
 
-//Test page
-document.getElementById('testPage').addEventListener('click', test_page);
+
 
 

@@ -3,9 +3,6 @@ runTests();
 
 function runTests() {
 
-	var items = {};
-
-
 	add_test_report({
 		"name": "Test function.",
 		"passed": true,

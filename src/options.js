@@ -35,7 +35,7 @@ function restore_options(items, callback) {
 
 		//Reset signature
 		//Only sign if there is a value.
-		//Otherwise, ensure value is empty.  
+		//Otherwise, ensure value is empty.
 		if (document.getElementById('messageToSign').value !== '') {
 			//items.signed
 			sign_message();
@@ -159,7 +159,7 @@ function import_key_pair() {
 
 //test link
 function test_page() {
-	chrome.tabs.create({url: "src/test.html"});
+	chrome.tabs.create({url: "/test/test.html"});
 }
 
 

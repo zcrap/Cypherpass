@@ -65,6 +65,8 @@ passwords to third parties.
 * Option: New keypair for each login.
   * Would need workaround from chrome storage constraint.
 * Support for client side certificates.
+* Firefox support.
+* Internalization.
 
 Cypherpass proudly uses the jsrsasign library from
 https://github.com/kjur/jsrsasign

@@ -13,6 +13,7 @@ function runTests() {
 		test_get_saved(new_test("Saved variables"), null, add_test_report);
 		test_signing(new_test("Valid signature"), items, add_test_report);
 		test_saving(new_test("Saving variables"), items, add_test_report);
+		test_saving(new_test("Restoring settings"), items, add_test_report);
 	});
 
 
@@ -70,11 +71,19 @@ function add_test_report(test) {
 
 	div.appendChild(message);
 
+	//p tag to display status and set div color.
+	var status = document.createElement("p");
+
 	if (test.passed !== true) {
 		div.setAttribute("class", "failed");
+		status.appendChild(document.createTextNode("Status: Failed"));
 	} else {
 		div.setAttribute("class", "passed");
+		status.appendChild(document.createTextNode("Status: Passed"));
 	}
+
+	div.appendChild(status);
+
 	document.getElementById("testResults").appendChild(div);
 }
 
@@ -125,7 +134,6 @@ function test_signing(test, items, callback) {
 	test.message.push("Message: " + items.message);
 	test.message.push("Public Key: " + items.publicKey);
 	test.message.push("Signature: " + items.signed);
-	test.message.push("Passed :" + test.passed);
 
 	//callback
 	callback(test);

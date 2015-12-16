@@ -9,16 +9,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="131.01445mm"
-   height="131.01445mm"
-   viewBox="0 0 464.22443 464.22442"
+   width="136.22911mm"
+   height="136.22911mm"
+   viewBox="0 0 482.70157 482.70157"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r"
    sodipodi:docname="cypher.svg"
    inkscape:export-filename="/home/z/dev/cypherpass/img/cypher_128.png"
-   inkscape:export-xdpi="25.156101"
-   inkscape:export-ydpi="25.156101">
+   inkscape:export-xdpi="23.865677"
+   inkscape:export-ydpi="23.865677">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -28,15 +28,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="115.72488"
-     inkscape:cy="386.44509"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="-102.83043"
+     inkscape:cy="296.86781"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
-     inkscape:window-width="1600"
-     inkscape:window-height="848"
-     inkscape:window-x="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     inkscape:window-x="1600"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      showborder="true"
@@ -44,7 +44,9 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:showpageshadow="false" />
+     inkscape:showpageshadow="false"
+     showguides="true"
+     inkscape:guide-bbox="true" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -53,7 +55,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -61,9 +63,9 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="circle"
-     transform="translate(-270.13632,-294.06891)">
+     transform="translate(-261.63632,-281.64919)">
     <circle
-       style="fill:#5599ff;fill-opacity:1;stroke:none"
+       style="fill:#2b5aa0;fill-opacity:1;stroke:#ffde00;stroke-width:17;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4139"
        cx="499.10663"
        cy="526.18115"
@@ -75,10 +77,10 @@
      inkscape:label="Lightning"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-270.13632,-294.06891)">
+     transform="translate(-261.63632,-281.64919)">
     <path
-       style="fill:#ffff00;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 369.3539,538.29333 207.24905,-228.2143 74.39925,-13.51012 -128.40361,197.56128 105.98766,1.30602 -240.94514,259.64287 90.6002,-215.48841 z"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#ffde00;stroke-width:17;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 383.00328,516.13687 582.26287,297.22189 727.58922,297.99748 550.87235,515.9964 668.48728,516.14433 274.50403,757.09938 481.78428,516.35716 Z"
        id="path3336"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="124.25967"

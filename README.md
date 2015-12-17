@@ -4,12 +4,11 @@
 
 Let's kill passwords.
 
-Cypherpass is a proof of concept exercise in using public key cryptography for
-authentication through a browser extension.
+Cypherpass is a public key authenticator browser extension.
 
-Cypherpass is aimed at lazy users that aren't too worried about authentication
-security but still want to easily and quickly authenticate while not revealing
-passwords to third parties.
+Cypherpass is a proof of concept exercise in using public key cryptography for
+authentication through a browser extension and is aimed at lazy users that
+aren't too worried about authentication security and desire to bypass passwords.
 
 ## What Cypherpass **IS NOT**
  * Completely secure.
@@ -43,7 +42,7 @@ passwords to third parties.
  * Easy to implement server side
  * Automatic identification and authentication
  * Using email account retrieval with Cypherpass, a website could do away with
-   passwords.
+   passwords entirely.
 
 ### Features/Behavior
 * Autofill forms with a type, "public_key"
@@ -67,6 +66,8 @@ passwords to third parties.
 * Support for client side certificates.
 * Firefox support.
 * Internalization.
+* Mobile.
+* Multiple logins.
 
 Cypherpass proudly uses the jsrsasign library from
 https://github.com/kjur/jsrsasign

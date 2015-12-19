@@ -1,37 +1,67 @@
 package main
 
 import (
+	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
 type sig struct {
-	pk  string
-	sig string
+	PK  string
+	SIG string
 }
 
-func (s *sig) populate(d string) {
-	parts := strings.Split(":", d)
-	s.pk = parts[1]
-	s.sig = parts[0]
+var reqInURL = regexp.MustCompile("/?/g")
+
+func (s *sig) populate(r *http.Request) error {
+	if reqInURL.FindString(r.URL.Path) != "" {
+		parts := strings.Split(":", r.URL.Path)
+		s.PK = parts[1]
+		s.SIG = parts[0]
+	} else {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		err = json.Unmarshal(body, &s)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+	}
+	return nil
 }
 
-func handleReq(w http.ResponseWriter, r *http.Request) {
+func parseBody(r *http.Request) (*sig, error) {
 	var data sig
 	if r.Body == nil {
 		log.Println("empty request!")
-		return
+		return nil, errors.New("empty request")
 	}
-	body, err := ioutil.ReadAll(r.Body)
+
+	err := data.populate(r)
 	if err != nil {
-		log.Println(err)
+		return nil, err
+	}
+
+	return &data, nil
+}
+
+func handleReq(w http.ResponseWriter, r *http.Request) {
+	data, err := parseBody(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	defer r.Body.Close()
-	data.populate(string(body))
-	log.Printf("pubKey: '%s' sig: '%s'", data.pk, data.sig)
+
+	log.Printf("pubKey: '%s' sig: '%s'", data.PK, data.SIG)
 }
 
 func main() {

@@ -15,51 +15,62 @@ var formChallengeName = "challenge";
 var signatureInputFeild = "signature";
 
 
-
 //Default Values for Variable object
+//
 //publicKey
 //privateKey
 //message
 //signed
+//autologin
+//autofill
 
 ///////////////////
 //Initial startup
 ///////////////////
+start();
+
 //Get saved settings and run rest of Cypherpass
-get_saved(function (items) {
-	//for testing uncomment.
-//	items = {
-//		privateKey: false,
-//		publicKey: false,
-//		autofill: true,
-//		autologin: true};
+function start(callback) {
+	//get saved options.
+	get_saved(function (items) {
 
-	//Do we have saved settings?
-	//If empty, we havn't saved yet.
-	//
-	//Make sure "items" is initilized first with empty values.
-	//running "get_saved" first initilizes empty "items"
-	if (!items.privateKey || !items.publicKey) {
-		console.log(
-				"Unable to retreive key pair.",
-				"Generating and saving new key."
-				);
-		//Generate new keypair and run.
-		items = newKeyPair(items, run);
-	} else {
-		//Settings have been loaded.
-		//Run the rest of Cypherpass
-		run(items);
-	}
+		//Do we have saved settings?
+		//If empty, we havn't saved yet.
+		//
+		//Make sure "items" is initilized first with empty values.
+		//running "get_saved" first initilizes empty "items"
+		if (!items.privateKey || !items.publicKey) {
+			console.log(
+					"Unable to retreive key pair.",
+					"Generating and saving new key."
+					);
+			//Generate new keypair and run.
+			items = newKeyPair(items, function (items) {
+				run(items, callback);
+			});
+		} else {
+			//Settings have been loaded.
+			//Run the rest of Cypherpass
+			run(items, callback);
+		}
 
-});
+	});
+}
 
-//Run the plugin options.
+
+//Run the plugin actions.
 function run(items, callback) {
 	//Don't auto login if asking for public key.
 	if (!autoFill(items)) {
 		//perform autologin
 		autoLogin(items);
+	}
+
+	//callback or return
+	if (typeof callback === 'function') {
+		return callback(items);
+	} else {
+		return items;
 	}
 }
 
@@ -76,7 +87,7 @@ function newKeyPair(items, callback) {
 	items.publicKey = "";
 
 	//Generate new keys and save them.
-	save_settings(generateKeys(items), callback);
+	return save_settings(generateKeys(items), callback);
 }
 
 //generate new key pair.
@@ -87,6 +98,15 @@ function generateKeys(items, callback) {
 	//Store key pair to items.
 	items.privateKey = keypair.ecprvhex;
 	items.publicKey = keypair.ecpubhex;
+
+	//Verify the newly generated key pair
+	var verified = verifyKeyPair(items);
+
+	//If not verified, throw new error
+	if (!verified) {
+		throw "Newly generated key pair was invalid.  \n\
+				Something is wrong.";
+	}
 
 	//callback or return
 	if (typeof callback === 'function') {
@@ -163,7 +183,8 @@ function signMessage(items, callback) {
 	}
 }
 
-
+//verify message
+//Returns boolean
 function verifyMessage(items) {
 	var sig = new KJUR.crypto.Signature({"alg": sigalg, "prov": "cryptojs/jsrsa"});
 	sig.initVerifyByPublicKey({'ecpubhex': items.publicKey, 'eccurvename': curve});
@@ -171,13 +192,14 @@ function verifyMessage(items) {
 	return sig.verify(items.signed);
 }
 
-
+//Verify keypair by attempting to sign message and verifying it.
+//Returns boolean value.
 function verifyKeyPair(items) {
 	if (!items.message) {
-		//TODO make this a random string.
-		items.message = "testMessage";
+		items.message = Math.random();
 	}
 
+	//Returns boolean
 	return signMessage(items, verifyMessage);
 }
 

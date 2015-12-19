@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Cypherpass Tests</title>
+		<!--
+		To run this page, type into the browser:
+		chrome-extension://ChromeExtensionID/test/test.html
+		-->
+
+		<style>
+			.failed{
+				background-color:red;
+			}
+
+			.passed{
+				background-color:greenyellow;
+			}
+
+			.center{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			img{
+				padding:5px;
+			}
+
+			h1{
+				display: inline;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="header" class="center">
+			<img src="/img/cypher_128.png" alt="cypherpass" style="width:128px;height:128px;"><h1>Cypherpass Tests</h1>
+		</div>
+		<div>
+
+		</div>
+		<hr>
+
+		<div id="testResults">
+		</div>
+
+
+
+		<script src="/src/jsrsasign.js"></script>
+		<script src="/src/storage.js"></script>
+		<script src="/src/content.js"></script>
+		<script src="/src/options.js"></script>
+		<script src="test.js"></script>
+	</body>
+</html>

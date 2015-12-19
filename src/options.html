@@ -1,70 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<!-- options.js will only run if this title matches -->
 		<title>Cypherpass Options</title>
-
-		<style>
-			*{
-				word-wrap:break-word;
-			}
-
-			body{
-				word-wrap: break-word;
-			}
-
-			p{
-				margin:1px;
-			}
-
-			div{
-				font-family: sans-serif;
-				padding-left: 5px;
-				padding: 2px;
-				margin: 2px;
-			}
-
-			td{
-				min-width: 150px;
-				max-width: 500px;
-
-			}
-
-			.dangerzoneContainer{
-				background-color: red;
-			}
-
-			.dangerzone{
-				background-color: red;
-				padding: 5px;
-				padding-top:0px;
-
-			}
-			.dangerzone>div{
-				background-color:pink;
-				border:1px;
-			}
-			.dangerzone>p span{
-				color: white;
-				font-weight: bold;
-				font-size: 125%;
-			}
-			.dangerzone>div p:first-child{
-				font-weight: bold;
-				margin:0px;
-			}
-
-			label {
-				display: inline-block;
-				min-width: 140px;
-			}​
+		<link rel="stylesheet" type="text/css" href="options.css"/>
 
 
-		</style>
 	</head>
 
 	<body>
-
-
 		<p>
 			<label>
 				<input type="checkbox" id="autofill" />
@@ -99,24 +43,6 @@
 			</p>
 			<div>
 				<p>
-					New Key Pair
-				</p>
-				<p>
-					<strong>WARNING:</strong>This will <strong>erase</strong>
-					the current key pair forever.
-				</p>
-				<p>
-					<label>
-						<input type="checkbox" id="newKeyPairDoubleCheck">
-						That's okay.
-					</label>
-				</p>
-				<p>
-					<button id="newKeyPair" disabled>Generate a new key pair</button>
-				</p>
-			</div>
-			<div>
-				<p>
 					Show private key
 				</p>
 				<p>
@@ -128,7 +54,30 @@
 			</div>
 			<div>
 				<p>
+					New Key Pair
+				</p>
+				<p>
+					Warning: This will erase
+					the current key pair forever.
+				</p>
+				<p>
+					<label>
+						<input type="checkbox" id="newKeyPairDoubleCheck">
+						That's okay.
+					</label>
+				</p>
+				<p>
+					<button id="newKeyPair" disabled>Generate a New Key Pair</button>
+				</p>
+			</div>
+
+			<div>
+				<p>
 					Import key pair
+				</p>
+				<p>
+					Warning: This will erase
+					the current key pair forever.
 				</p>
 				<p>
 					<label for='importPublicInput'> Public Key:</label>
@@ -140,16 +89,25 @@
 
 				</p>
 
-				<p>
-					<strong>WARNING:</strong>This will <strong>erase</strong>
-					the current key pair forever.
-				</p>
+
 				<p>
 					<button id="importKeyPairButton">Import Key Pair</button>
 				</p>
 			</div>
-		</div>
 
+			<div>
+				<p>
+					Extension Test Link
+				</p>
+				<p>
+					Warning: Backup your settings before clicking this link.
+				</p>
+				<p>
+					<button id="testPage">Test Page</button>
+				</p>
+
+			</div>
+		</div>
 
 		<p>
 			<span id="status">&nbsp</span>

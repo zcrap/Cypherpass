@@ -1,34 +1,32 @@
 ![Cypherpass](/img/cypher_128.png)
 
-# Cypherpass
+# Cypherpass #
+#### Public Key Authenticator ####
 
 Let's kill passwords.
-
-Cypherpass is a public key authenticator browser extension.
 
 Cypherpass is a proof of concept exercise in using public key cryptography for
 authentication through a browser extension and is aimed at lazy users that
 aren't too worried about authentication security and desire to bypass passwords.
 
-## What Cypherpass **IS NOT**
+### What Cypherpass **IS NOT**
  * Completely secure.
- * Better than TLS.
- * Better than OpenSSL.
- * Better than $secure_solution
+ * Better than TLS, OpenSSL, or other $secure_solution
 
-## What Cypherpass **IS**
- * Sometimes better than lazy, security unconcerned users reusing passwords
+### What Cypherpass **IS**
+ * Sometimes better than security unconcerned users reusing passwords
    and blinding trusting websites with password security.
 
-## How does cypherpass work?
-* Cypherpass generates a public/private key pair in the browser and saves it to
+### How does Cypherpass work?
+* Cypherpass initially generates a public/private keypair and saves it to
   Google's cloud storage syncing all instances.
-* Supporting websites first associate user's public key with their login.
-* When offering authenticating, a website generates a random token.
-* Cypherpass signs the token and sends it back with the public key.
-* The website verifies the signature thereby authenticating the user.
+* Supporting websites associate a user's public key with their login, just like a password.
+* When authenticating a website provides a random token.
+* Cypherpass cryptographically signs the token.
+* The website verifies the cryptographic signature thereby authenticating the
+  user.
 
-## How does autologin work?
+### How does autologin work?
 * Cypherpass looks for a form named `public_key_login`
 * Form should have an attribute named `challenge` with a randomly generated
   value (we suggest something a few bytes long, like
@@ -57,17 +55,20 @@ aren't too worried about authentication security and desire to bypass passwords.
 * Support multiple crypto suites.
 * Rate limit auto login, allow user to configure this in options page.
 * Option: Add an area to manually verify signatures.
+* Test server.
 
 ### Wishlist
-* Option: Encrypt stored variables.
-  * Javascript to encrypt, unencrypt using a password.
+* Third party signature server
+  * Signature server verifies clients via authorized keys.
 * Option: New keypair for each login.
-  * Would need workaround from chrome storage constraint.
+  * Workaround from chrome storage constraint using third party services.
+* Multiple logins.
 * Support for client side certificates.
 * Firefox support.
 * Internalization.
 * Mobile.
-* Multiple logins.
+* Option: Encrypt stored variables.
+  * Javascript to encrypt, unencrypt.
 
 Cypherpass proudly uses the jsrsasign library from
 https://github.com/kjur/jsrsasign

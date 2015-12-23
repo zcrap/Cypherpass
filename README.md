@@ -54,7 +54,6 @@ aren't too worried about authentication security and desire to bypass passwords.
 * In browser extension unit testing.
 * Support multiple crypto suites.
 * Rate limit auto login, allow user to configure this in options page.
-* Option: Add an area to manually verify signatures.
 * Test server.
 
 ### Wishlist

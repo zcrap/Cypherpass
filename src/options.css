@@ -29,6 +29,11 @@ input[type="text"] {
 	width: 400px;
 }
 
+.center{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
 .clear{
 	clear: both;

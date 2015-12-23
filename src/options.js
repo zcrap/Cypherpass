@@ -97,7 +97,7 @@ function sign_message() {
 
 		signMessage(items, function (items) {
 			document.getElementById('signature').textContent
-					= items.signed + ":" + items.publicKey;
+					= items.publicKey + '|' + items.signed + "|" + items.message;
 		});
 	});
 }

@@ -33,55 +33,73 @@
 		</div>
 
 
-		<div class="tools">
+		<div class="tools container">
 			<p>Tools</p>
-			<div class="pair">
-				<div class="key">
-					Sign message
+
+			<div>
+				<p>Sign Message</p>
+				<div class="pair">
+					<div class="key">
+						Message
+					</div>
+					<div class="value">
+						<input type="text" id="messageToSign" />
+					</div>
 				</div>
-				<div class="value">
-					<input type="text" id="messageToSign" />
+
+				<div class="pair">
+					<div class="key">
+						Signature + Public Key
+					</div>
+					<div class="value">
+						<span id="signature">&nbsp</span>
+					</div>
 				</div>
+
 			</div>
 
 
-			<div class="pair">
-				<div class="key">
-					Signature:Public Key
+
+			<div>
+				<p>Verify Message Signature</p>
+				<div class="pair">
+					<div class="key">
+						Message
+					</div>
+					<div class="value">
+						<input type="text" id="verifyMessageMessage" />
+					</div>
 				</div>
-				<div class="value">
-					<span id="signature">&nbsp</span>
+
+				<div class="pair">
+					<div class="key">
+						Public Key
+					</div>
+					<div class="value">
+						<input type="text" id="verifyMessagePublicKey" />
+					</div>
 				</div>
-			</div>
+
+				<div class="pair">
+					<div class="key">
+						Signature
+					</div>
+					<div class="value">
+						<input type="text" id="verifyMessageSignature" />
+					</div>
+				</div>
 
 
-			<div class="pair">
-				<div class="key">
-					Message
+				<div class="pair">
+					<div class="key">
+						Verified
+					</div>
+					<div class="value">
+						<span id="verifyMessageVerified">&nbsp</span>
+					</div>
 				</div>
-				<div class="value">
-					<input type="text" id="verifyMessageMessage" />
-				</div>
-			</div>
 
 
-			<div class="pair">
-				<div class="key">
-					Signature
-				</div>
-				<div class="value">
-					<input type="text" id="verifyMessageSignature" />
-				</div>
-			</div>
-
-
-			<div class="pair">
-				<div class="key">
-					Public Key
-				</div>
-				<div class="value">
-					<input type="text" id="verifyMessagePublicKey" />
-				</div>
 			</div>
 
 		</div>
@@ -89,7 +107,7 @@
 
 		<div class="container dangerzone">
 			<p>
-				<span> DANGER ZONE </span>
+				DANGER ZONE
 			</p>
 			<div>
 				<p>
@@ -158,6 +176,10 @@
 
 			</div>
 		</div>
+
+		<p>
+			<button id="optionsPage">Open options page in a new tab</button>
+		</p>
 
 		<p>
 			<span id="status">&nbsp</span>

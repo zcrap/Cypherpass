@@ -45,7 +45,7 @@ function restore_options(items, callback) {
 
 		//callback or return
 		if (typeof callback === 'function') {
-			return callback(items)
+			return callback(items);
 		} else {
 			return items;
 		}
@@ -96,10 +96,43 @@ function sign_message() {
 		items.message = document.getElementById('messageToSign').value;
 
 		signMessage(items, function (items) {
-			document.getElementById('signature').textContent = items.signed + ":" + items.publicKey;
+			document.getElementById('signature').textContent
+					= items.signed + ":" + items.publicKey;
 		});
 	});
 }
+
+//Verify signatures in the options page
+function option_verify_signature() {
+	var items = {};
+	items.message = document.getElementById('verifyMessageMessage').value;
+	items.publicKey = document.getElementById('verifyMessagePublicKey').value;
+	items.signed = document.getElementById('verifyMessageSignature').value;
+
+	var verified = false;
+	var verifiedMessage = "";
+	var divStyle = document.getElementById('verifyMessageVerified')
+			.parentElement.parentElement.style;
+
+	//Set background color to failed.
+	divStyle.backgroundColor = "#ffcccc";
+
+	//Attempt to verify
+	try {
+		if (verifyMessage(items) === true) {
+			verifiedMessage = "Valid signature.";
+			divStyle.backgroundColor = "greenyellow";
+		} else {
+			verifiedMessage = "Invalid signature.";
+		}
+	} catch (e) {
+		verifiedMessage = "Invalid signature. " + e;
+	}
+
+	document.getElementById('verifyMessageVerified').textContent
+			= verifiedMessage;
+}
+
 
 
 //User must check in acknowledgement that they want to create new key pair.
@@ -153,14 +186,26 @@ function import_key_pair() {
 			refresh_gui(update_status('Imported new key pair.'));
 		});
 	} else {
-		update_status('Invalide Key pair.  Pair not saved.  ')
+		update_status('Invalide Key pair.  Pair not saved.  ');
 	}
 }
 
-//test link
+
+
+
+
+
+
+////Set button link to new test page tab
 function test_page() {
 	chrome.tabs.create({url: "/test/test.html"});
 }
+
+//Set button link to new options page tab
+function options_page() {
+	chrome.tabs.create({url: "/src/options.html"});
+}
+
 
 
 
@@ -184,6 +229,15 @@ function option_page() {
 	//Sign on update
 	document.getElementById('messageToSign').addEventListener("input", sign_message);
 
+	//Verify Signature
+	//Verify on update
+	document.getElementById('verifyMessageMessage')
+			.addEventListener("input", option_verify_signature);
+	document.getElementById('verifyMessagePublicKey')
+			.addEventListener("input", option_verify_signature);
+	document.getElementById('verifyMessageSignature')
+			.addEventListener("input", option_verify_signature);
+
 	//New Keypair
 	//Make sure the user knows what they are doing first.
 	document.getElementById('newKeyPair').addEventListener('click', newKeyPairOption);
@@ -196,8 +250,12 @@ function option_page() {
 	//Import key pair
 	document.getElementById('importKeyPairButton').addEventListener("click", import_key_pair);
 
-	//Test page
+	//Test page new tab
 	document.getElementById('testPage').addEventListener('click', test_page);
+
+	//Options page new tab
+	document.getElementById('optionsPage').addEventListener('click', options_page);
+
 }
 
 

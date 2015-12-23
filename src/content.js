@@ -27,7 +27,12 @@ var signatureInputFeild = "signature";
 ///////////////////
 //Initial startup
 ///////////////////
-start();
+//Don't run on the options page.
+if (document.title !== "Cypherpass Options") {
+	start();
+}
+
+
 
 //Get saved settings and run rest of Cypherpass
 function start(callback) {

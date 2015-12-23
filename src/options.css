@@ -24,10 +24,11 @@ div {
 
 }
 
-td {
-	min-width: 150px;
-	max-width: 500px;
+input[type="text"] {
+	height: 10px;
+	width: 400px;
 }
+
 
 .clear{
 	clear: both;
@@ -50,8 +51,6 @@ td {
 .pair {
 	padding: 2px;
 	margin: 2px;
-	background-color:white;
-
 }
 
 .pair:after {
@@ -60,45 +59,42 @@ td {
 	clear: both;
 }
 
-.tools{
-	background-color:#2b5aa0;
-	padding: 2px;
-}
-
-.tools p {
-	color:white;
-	font-weight: bold;
-	font-size: 125%;
-}
-
-.dangerzoneContainer{
-	background-color: red;
-}
-
-.dangerzone{
-	background-color: red;
+.container{
 	padding: 5px;
 	padding-top:0px;
 	margin-top:10px;
-
 }
-.dangerzone>div{
-	background-color:#fff8fa;
+
+.container>div{
+	background-color:white;
 	margin:2px;
 	padding:5px;
 }
-.dangerzone>p span{
+
+.container>p:first-child{
 	color: white;
 	font-weight: bold;
 	font-size: 125%;
 }
-.dangerzone>div p:first-child{
+
+.container>div p:first-child{
 	font-weight: bold;
 	font-size: 125%;
 	margin:0px;
+	text-decoration: underline;
 }
 
-input[type="text"] {
-	height: 10px;
-	width: 400px;
+.tools{
+	background-color:#2b5aa0;
 }
+
+
+.dangerzone{
+	background-color: red;
+}
+.dangerzone>div{
+	background-color:#fff8fa;
+}
+
+
+

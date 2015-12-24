@@ -1,45 +1,54 @@
-runTests();
+document.addEventListener('DOMContentLoaded', test_page);
 
 
-function runTests() {
+function test_page() {
 
+	//Add a sample test report to make sure it's working.
 	add_test_report({
 		"name": "Test function.",
 		"passed": true,
 		"message": "Test messsages go here."
 	});
 
-	get_saved(function (items) {
-		test_get_saved(new_test("Saved variables"), null, add_test_report);
-		test_signing(new_test("Valid signature"), items, add_test_report);
-		test_saving(new_test("Saving variables"), items, add_test_report);
-		test_saving(new_test("Restoring settings"), items, add_test_report);
-	});
+	//Get current saved settigns and run tests.
+	get_saved(run_tests);
+}
 
+function run_tests(items) {
+	test(test_get_saved, "Saved variables", items);
+	test(test_signing, "Valid signature", items);
+	test(test_autofill, "Test autofil function", items);
+	test(test_saving, "Saving variables", items);
+	test(test_restore, "Restoring settings", items);
+}
 
+function test(func, name, items) {
+	func(new_test_object(name), items, add_test_report);
 }
 
 //Add the test report to the test page.
 function add_test_report(test) {
 
+	//Check to see if test object is valid.
 	if (typeof test === "undefined") {
 		throw "Undefined test objected.";
 	}
-
-	var div = document.createElement("div");
-
-	if (test.name !== "undefined") {
-		var title = document.createElement("h1");
-		title.appendChild(document.createTextNode(test.name));
-		div.appendChild(title);
-	}
-
 	if (test.message === "undefined") {
 		throw "Test message is undefined.  Invalid test.";
 	}
+	if (test.name === "undefined") {
+		throw "Test name is undefined.  Invalid test.";
+	}
 
-	//Message to pring out on body of test report.
+	//Div to put the test report in.
+	var div = document.createElement("div");
+	//Message to print out on body of test report.
 	var message;
+	//title of the test report
+	var title = document.createElement("h1");
+	//Add the name of the test to the div
+	title.appendChild(document.createTextNode(test.name));
+	div.appendChild(title);
 
 	//If message is a string, print literal contents.
 	//If array, pring line by line.
@@ -89,11 +98,11 @@ function add_test_report(test) {
 
 
 //Return a new test object
-function new_test(name) {
+function new_test_object(name) {
 	return {
 		"name": name,
 		"passed": false,
-		"message": ''
+		"message": []
 	};
 }
 
@@ -130,7 +139,6 @@ function test_signing(test, items, callback) {
 	test.passed = verifyKeyPair(items);
 
 	//Print out the relevant components needed to manually verify test.
-	test.message = [];
 	test.message.push("Message: " + items.message);
 	test.message.push("Public Key: " + items.publicKey);
 	test.message.push("Signature: " + items.signed);
@@ -139,6 +147,39 @@ function test_signing(test, items, callback) {
 	callback(test);
 }
 
+function test_autofill(test, items, callback) {
+	var pubKeyFeild = document.getElementById('public_key').value;
+	var pubKeyFeild2 = document.getElementById('public_key2').value;
+	var firstName = document.getElementById('first_name').value;
+
+	if (
+			pubKeyFeild === items.publicKey &&
+			firstName === "" &&
+			pubKeyFeild2 === ""
+			) {
+
+		test.passed = true;
+	}
+
+	test.message.push("public_key fill value: " + pubKeyFeild);
+	test.message.push("public_key 2 fill value: " + pubKeyFeild2);
+	test.message.push("Control feild: " + firstName);
+
+
+	callback(test);
+}
+
+function test_autologin(test, items, callback) {
+	//TODO
+	callback(test);
+}
+
 function test_saving(test, items, callback) {
+	//TODO
+	callback(test);
+}
+
+function test_restore(test, items, callback) {
+	//TODO
 	callback(test);
 }

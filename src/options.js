@@ -105,11 +105,19 @@ function sign_message() {
 //Verify signatures in the options page
 function option_verify_signature() {
 	var items = {};
-	items.message = document.getElementById('verifyMessageMessage').value;
 	items.publicKey = document.getElementById('verifyMessagePublicKey').value;
 	items.signed = document.getElementById('verifyMessageSignature').value;
+	items.message = document.getElementById('verifyMessageMessage').value;
 
-	var verified = false;
+	//check to see if it was all dumped into pubkey.
+	//TODO figure out good way to handle message escaping.
+	var parts = items.publicKey.split("|");
+	if (parts.length === 3) {
+		items.publicKey = parts[0];
+		items.signed = parts[1];
+		items.message = parts[2];
+	}
+
 	var verifiedMessage = "";
 	var divStyle = document.getElementById('verifyMessageVerified')
 			.parentElement.parentElement.style;

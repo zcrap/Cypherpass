@@ -150,14 +150,14 @@ function autoLogin(items) {
 		items.message = form.getAttribute(formChallengeName);
 		inputFeild = document.getElementsByName(signatureInputFeild)[0];
 		if (items.message && inputFeild) {
-			console.log("Challenge: " + items.message);
 
 			items = signMessage(items, function (items) {
 				return items;
 			});
 
+			console.log("Challenge: " + items.message);
 			console.log("Signed message: " + items.signed);
-			inputFeild.value = items.signed + ":" + items.publicKey;
+			inputFeild.value = items.publicKey + "|" + items.signed;
 			form.submit();
 		}
 	}

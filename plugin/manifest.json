@@ -10,9 +10,9 @@
 				"<all_urls>"
 			],
 			"js": [
-				"src/jsrsasign.js",
-				"src/storage.js",
-				"src/content.js"
+				"vendor/jsrsasign.js",
+				"js/storage.js",
+				"js/content.js"
 			]
 		}
 	],

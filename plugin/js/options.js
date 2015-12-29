@@ -218,7 +218,7 @@ function copy_text(element) {
 
 ////Set button link to new test page tab
 function test_page() {
-	chrome.tabs.create({url: "/test/test.html"});
+	chrome.tabs.create({url: "/src/test.html"});
 }
 
 //Set button link to new options page tab

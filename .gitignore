@@ -1,3 +1,5 @@
 nbproject/
 *.zip
 server
+bower_components/
+npm*

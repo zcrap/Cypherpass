@@ -121,10 +121,10 @@ function test_get_saved(test, items, callback) {
 		test.message = items;
 
 		if (
-				items.autofill &&
-				items.autologin &&
-				items.publicKey &&
-				items.privateKey
+				items.autofill !== "undefined" &&
+				items.autologin !== "undefined" &&
+				items.publicKey !== "undefined" &&
+				items.privateKey !== "undefined"
 				) {
 			test.passed = true;
 		}

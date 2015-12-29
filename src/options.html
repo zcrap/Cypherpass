@@ -28,18 +28,21 @@
 		</p>
 
 
-		<div class="pair">
-			<div class="key">
-				Public key
-			</div>
-			<div class="value">
-				<span id="publicKey"></span>
-			</div>
-		</div>
+
 
 
 		<div class="tools container">
 			<p>Tools</p>
+
+			<div class="pair">
+				<p>Public key</p>
+				<div class="key">
+					<button id="selectPublicKey">Copy Public Key</button>
+				</div>
+				<div class="value">
+					<span id="publicKey"></span>
+				</div>
+			</div>
 
 			<div>
 				<p>Sign Message</p>
@@ -55,6 +58,7 @@
 				<div class="pair">
 					<div class="key">
 						Public Key | Signature | Message
+						<button id="selectSigned">Copy Signature</button>
 					</div>
 					<div class="value">
 						<span id="signature">&nbsp</span>

@@ -9,7 +9,7 @@
 
 
 		if (!empty($_POST['signature'])) {
-			$signature = explode(":", $_POST['signature']);
+			$signature = explode("|", $_POST['signature']);
 
 			if (count($signature) !== 2) {
 				die("Invalid signature");

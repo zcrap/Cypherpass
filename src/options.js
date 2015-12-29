@@ -198,6 +198,18 @@ function import_key_pair() {
 	}
 }
 
+function copy_text(element) {
+	//Before we copy, we are going to select the text.
+	var text = document.getElementById(element);
+	var selection = window.getSelection();
+	var range = document.createRange();
+	range.selectNodeContents(text);
+	selection.removeAllRanges();
+	selection.addRange(range);
+	//add to clipboard.
+	document.execCommand('copy');
+}
+
 
 
 
@@ -233,9 +245,19 @@ function option_page() {
 	document.getElementById('autofill').addEventListener("change", save_options);
 	document.getElementById('autologin').addEventListener("change", save_options);
 
+	//Select Public Key
+	document.getElementById('selectPublicKey').addEventListener("click", function () {
+		copy_text('publicKey');
+	});
+
 	//Sign message
 	//Sign on update
 	document.getElementById('messageToSign').addEventListener("input", sign_message);
+
+	//Select signed
+	document.getElementById('selectSigned').addEventListener("click", function () {
+		copy_text('signature');
+	});
 
 	//Verify Signature
 	//Verify on update

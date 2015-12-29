@@ -34,13 +34,16 @@
 		<div class="tools container">
 			<p>Tools</p>
 
-			<div class="pair">
+			<div>
 				<p>Public key</p>
-				<div class="key">
-					<button id="selectPublicKey">Copy Public Key</button>
-				</div>
-				<div class="value">
-					<span id="publicKey"></span>
+				<div class="pair">
+					<div class="key">
+						<button id="selectPublicKey">Copy Public Key</button>
+					</div>
+					<div class="value">
+						<span id="publicKey"
+							  title="Your public key is what identifies you to third parties"></span>
+					</div>
 				</div>
 			</div>
 
@@ -57,11 +60,14 @@
 
 				<div class="pair">
 					<div class="key">
-						Public Key | Signature | Message
-						<button id="selectSigned">Copy Signature</button>
+						<button id="selectSigned">
+							Copy Signature
+						</button>
 					</div>
 					<div class="value">
-						<span id="signature">&nbsp</span>
+						<span id="signature" title="We've formatting the signature as 'Public Key | Signature | Message' so that third parties have everything they need to verify your signature. ">
+							&nbsp
+						</span>
 					</div>
 				</div>
 

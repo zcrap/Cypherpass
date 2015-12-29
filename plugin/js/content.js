@@ -2,6 +2,16 @@
 //Default Settings
 ///////////////////
 
+//Values for Variable object
+//
+//publicKey
+//privateKey
+//message
+//signed
+//autologin
+//autofill
+
+
 //Default crypto
 var curve = "secp256k1";
 var sigalg = "SHA256withECDSA";
@@ -15,14 +25,7 @@ var formChallengeName = "challenge";
 var signatureInputFeild = "signature";
 
 
-//Default Values for Variable object
-//
-//publicKey
-//privateKey
-//message
-//signed
-//autologin
-//autofill
+
 
 ///////////////////
 //Initial startup

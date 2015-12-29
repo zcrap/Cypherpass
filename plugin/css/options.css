@@ -67,7 +67,8 @@ input[type="text"] {
 .container{
 	padding: 5px;
 	padding-top:0px;
-	margin-top:10px;
+	margin:10px 0;
+	border-radius: 3px;
 }
 
 .container>div{
@@ -76,10 +77,19 @@ input[type="text"] {
 	padding:5px;
 }
 
+.container>div:first-of-type{
+	border-radius: 3px 3px 0 0;
+}
+
+.container>div:last-of-type{
+	border-radius: 0 0 3px 3px;
+}
+
 .container>p:first-child{
 	color: white;
 	font-weight: bold;
 	font-size: 125%;
+	padding:5px;
 }
 
 .container>div p:first-child{

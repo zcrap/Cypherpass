@@ -29,6 +29,9 @@ function save_settings(items, callback) {
 		publicKey: items.publicKey,
 		autofill: items.autofill,
 		autologin: items.autologin,
+		enableKeyLedger: items.enableKeyLedger,
+		keyLedgerUrl: items.keyLedgerUrl
+
 	}, function () {
 		//callback or return
 		if (typeof callback === 'function') {
@@ -49,8 +52,9 @@ function get_defaults(items) {
 		privateKey: false,
 		publicKey: false,
 		autofill: true,
-		autologin: true
-
+		autologin: true,
+		enableKeyLedger: true,
+		keyLedgerUrl: null
 	};
 
 	return presets;

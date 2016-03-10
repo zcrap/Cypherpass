@@ -25,6 +25,11 @@ function restore_options(items, callback) {
 		document.getElementById('autofill').checked = items.autofill;
 		document.getElementById('autologin').checked = items.autologin;
 		document.getElementById('publicKey').textContent = items.publicKey;
+		//Key Ledger
+		document.getElementById('enableKeyLedger').checked = items.enableKeyLedger;
+		document.getElementById('keyLedgerUrl').value = items.keyLedgerUrl;
+
+
 		//Reset if showing private key.
 		var pricon = document.getElementById('privateKey').textContent;
 		if (pricon !== "" && pricon !== " ") {
@@ -62,7 +67,12 @@ function save_options() {
 	items.autofill = document.getElementById('autofill').checked;
 	items.autologin = document.getElementById('autologin').checked;
 
+	//Key Ledger
+	items.enableKeyLedger = document.getElementById('enableKeyLedger').checked;
+	items.keyLedgerUrl = document.getElementById('keyLedgerUrl').value;
+
 	update_status('Saving....');
+	console.log("Saving items.keyLedgerUrl: " + items.keyLedgerUrl);
 
 	save_settings(items, update_status('Settings Saved'));
 }
@@ -241,9 +251,14 @@ function option_page() {
 	//TODO loaded should happen, then everything else.
 	document.addEventListener('DOMContentLoaded', initialize);
 
-	//Auto save on checkboxes
+	///////////
+	//Auto save
+	////////
 	document.getElementById('autofill').addEventListener("change", save_options);
 	document.getElementById('autologin').addEventListener("change", save_options);
+
+	document.getElementById('enableKeyLedger').addEventListener("change", save_options);
+	document.getElementById('keyLedgerUrl').addEventListener("input", save_options);
 
 	//Select Public Key
 	document.getElementById('selectPublicKey').addEventListener("click", function () {

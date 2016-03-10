@@ -1,5 +1,4 @@
 
-
 //run only on the options page.
 if (document.title === "Cypherpass Options") {
 	option_page();

@@ -47,14 +47,19 @@ aren't too worried about authentication security and desire to bypass passwords.
 * Cypherpass will not autologin if the page is asking for public key.
 
 ### Known Issues And Concerns
-* Chrome's storage area isn't encrypted meaning sensitive information is
-  stored in plaintext.
+* Chrome's storage area isn't encrypted meaning sensitive information, namely
+private keys, is stored in plaintext.
 
 ### //TODO
+* Migrate messaging to json
 * In browser extension unit testing.
+* Support key ledger autofill
+* Support many key ledgers.
+* Support key ledger signing.
 * Support multiple crypto suites.
 * Rate limit auto login, allow user to configure this in options page.
 * Test server.
+* Option to autofill/login on https only.
 
 ### Wishlist
 * Third party signature server
@@ -63,6 +68,7 @@ aren't too worried about authentication security and desire to bypass passwords.
   * Workaround from chrome storage constraint using third party services.
 * Multiple logins.
 * Support for client side certificates.
+* Support for SSH keys
 * Firefox support.
 * Internalization.
 * Mobile.

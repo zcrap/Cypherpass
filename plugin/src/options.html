@@ -68,18 +68,21 @@
 
 				<div class="pair">
 					<div class="key">
-						<button id="checkKeyLedger">
+						<button id="verifyKeyLedger">
 							Verify Key Ledger
 						</button>
-						<p>
-							Verify that Key Ledger is accessible and that public
-							key appears
-						</p>
 					</div>
 					<div class="value">
-						<span id="verifyLedgerMessage" title=" ">
-							&nbsp
+						<span id="keyLedgerVerified" title="">
+							Ledger not verified
 						</span>
+					</div>
+				</div>
+
+				<div class="pair">
+					<div class="key">
+					</div>
+					<div class="value">
 					</div>
 				</div>
 
@@ -246,6 +249,7 @@
 		</p>
 
 		<script src="/vendor/jsrsasign.js"></script>
+		<script src="/vendor/cyphernode.js"></script>
 		<script src="/vendor/jquery.min.js"></script>
 		<script src="/js/storage.js"></script>
 		<script src="/js/content.js"></script>

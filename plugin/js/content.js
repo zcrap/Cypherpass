@@ -172,9 +172,6 @@ function signMessage(items, callback) {
 	try {
 		var sig = new KJUR.crypto.Signature({"alg": sigalg});
 	} catch (e) {
-		//Appear to need to change the content_security_policy thanks to
-		//Chrome sandboxing in the options page.
-		//The options in the manifest for "unsafe-eval" appears to be needed.
 		update_status(e);
 	}
 
@@ -221,5 +218,7 @@ function hash(token) {
 	//second round
 	hasher.updateString(hashed);
 	hashed = hasher.digest();
+
+	return hashed;
 }
 

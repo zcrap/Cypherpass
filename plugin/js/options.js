@@ -10,6 +10,7 @@ function initialize() {
 	//This will initilize any empt options.
 	//Then restore the otions page.
 	start(restore_options);
+
 }
 
 //Update the options page GUI to show the latest saved information
@@ -27,6 +28,9 @@ function restore_options(items, callback) {
 		//Key Ledger
 		document.getElementById('enableKeyLedger').checked = items.enableKeyLedger;
 		document.getElementById('keyLedgerUrl').value = items.keyLedgerUrl;
+		setKeyLedgerVerified(items.keyLedgerVerified)
+
+		//$("#keyLedgerVerified").text();
 
 
 		//Reset if showing private key.
@@ -60,19 +64,21 @@ function restore_options(items, callback) {
 
 
 function save_options() {
-
 	var items = {};
-
+	//Cypherpass behavior.
 	items.autofill = document.getElementById('autofill').checked;
 	items.autologin = document.getElementById('autologin').checked;
 
 	//Key Ledger
 	items.enableKeyLedger = document.getElementById('enableKeyLedger').checked;
 	items.keyLedgerUrl = document.getElementById('keyLedgerUrl').value;
+	items.keyLedgerVerified = $("#keyLedgerVerified").attr("value");
+	console.log("Saving ledger status" + $("#keyLedgerVerified").attr("value"));
 
 	update_status('Saving....');
 	console.log("Saving items.keyLedgerUrl: " + items.keyLedgerUrl);
 
+	//save options using save settings in storage.js
 	save_settings(items, update_status('Settings Saved'));
 }
 
@@ -207,6 +213,92 @@ function import_key_pair() {
 	}
 }
 
+
+
+function key_ledger_verify() {
+	console.log("Starting key_ledger_verify");
+	var transaction = {};
+	cyphernode.generate_transaction_json(transaction);
+
+	get_saved(function (items) {
+		console.log("Verifing Key Ledger...");
+		items.input = items.publicKey;
+		items.output = items.publicKey;
+
+		var trans = cyphernode.transaction_hashable_json(items);
+		console.log("Transaction portion to be hashed: " + trans);
+		items.message = hash(trans);
+		console.log("Transaction hashed: " + items.message);
+
+		items.transaction_hashed = items.message;
+
+
+
+		signMessage(items, function (items) {
+			console.log("signed transaction..." + items.signed);
+			var json = cyphernode.generate_transaction_json(items);
+			console.log("Json to send to server: " + json);
+
+			$.post(items.keyLedgerUrl, json, function (data) {
+				console.log("Post success");
+				console.log(data);
+				if (data.key_verified) {
+					if (data.key_verified === "true" || data.key_verified === items.publicKey)
+						console.log("Key verified");
+					setKeyLedgerVerified("Ledger last verified: " + Date(), true, true)
+				}
+
+			}, "json").fail(function (data) {
+				console.log("Post Failed.");
+				console.log(data);
+				setKeyLedgerVerified("Problem communicating with ledger.", false, true)
+			});
+		});
+	});
+}
+
+function setKeyLedgerVerified(s, status, save) {
+
+
+	if (s && s != "false" && status != false) {
+		$("#keyLedgerVerified")
+				.text(s)
+				.removeAttr()
+				.css('color', 'green')
+				.attr({"value": s});
+
+	} else {
+		if (!s) {
+			s = "Unable to verify ledger."
+		} else if (s == "false") {
+			s = "Ledger not verified."
+		}
+		$("#keyLedgerVerified")
+				.text(s)
+				.removeAttr()
+				.css({'color': 'red'})
+				.attr({"value": false});
+	}
+	if (save) {
+		save_options();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function copy_text(element) {
 	//Before we copy, we are going to select the text.
 	var text = document.getElementById(element);
@@ -263,6 +355,15 @@ function option_page() {
 	document.getElementById('selectPublicKey').addEventListener("click", function () {
 		copy_text('publicKey');
 	});
+
+
+	//////////////
+	//Key Ledger
+	/////////////
+
+	$("#verifyKeyLedger").click(key_ledger_verify);
+
+
 
 	//Sign message
 	//Sign on update

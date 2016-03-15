@@ -111,8 +111,9 @@ function sign_message() {
 		items.message = document.getElementById('messageToSign').value;
 
 		signMessage(items, function (items) {
-			document.getElementById('signature').textContent
-					= items.publicKey + '|' + items.signed + "|" + items.message;
+			json = {"public_key": items.publicKey, "message": items.message, "signed": items.signed};
+			json = JSON.stringify(json);
+			document.getElementById('signature').textContent = json
 		});
 	});
 }
@@ -123,6 +124,28 @@ function option_verify_signature() {
 	items.publicKey = document.getElementById('verifyMessagePublicKey').value;
 	items.signed = document.getElementById('verifyMessageSignature').value;
 	items.message = document.getElementById('verifyMessageMessage').value;
+
+	//allow the first feild to have json object input with all components
+	json = JSON.parse(items.publicKey);
+
+	if (json.public_key) {
+		console.log("got public key: " + json.public_key);
+		items.publicKey = json.public_key;
+	}
+
+	//Support "challenge" terminology as well.
+	//Message to overwrite if exists.  
+	if (json.challenge) {
+		items.message = json.challenge;
+	}
+
+	if (json.message) {
+		items.message = json.message;
+	}
+
+	if (json.signed) {
+		items.signed = json.signed;
+	}
 
 	//check to see if it was all dumped into pubkey.
 	//TODO figure out good way to handle message escaping.

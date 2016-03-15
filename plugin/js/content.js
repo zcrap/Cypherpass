@@ -20,9 +20,15 @@ var sigalg = "SHA256withECDSA";
 var autofillFeildName = 'public_key';
 
 //Auto login values
-var autoLoginFormName = "public_key_login";
-var formChallengeName = "challenge";
+var autoLoginFormName = "public_key_auth";
+var formChallengeAttr = "data-public_key_challenge";
 var signatureInputFeild = "signature";
+
+//Custom HTML 5 types
+//These types should be true or false
+var keyLedgerSupport = "data-public_key_ledger";
+var publicKeySupport = "data-public_key_auth";
+
 
 
 
@@ -150,7 +156,7 @@ function autoLogin(items) {
 	var form = document.getElementsByName(autoLoginFormName)[0];
 	if (form) {
 
-		items.message = form.getAttribute(formChallengeName);
+		items.message = form.getAttribute(formChallengeAttr);
 		inputFeild = document.getElementsByName(signatureInputFeild)[0];
 		if (items.message && inputFeild) {
 
@@ -160,7 +166,10 @@ function autoLogin(items) {
 
 			console.log("Challenge: " + items.message);
 			console.log("Signed message: " + items.signed);
-			inputFeild.value = items.publicKey + "|" + items.signed;
+			json = {"public_key": items.publicKey, "challenge": items.message, "signed": items.signed};
+			json = JSON.stringify(json);
+			//inputFeild.value = items.publicKey + "|" + items.signed;
+			inputFeild.value = json;
 			form.submit();
 		}
 	}

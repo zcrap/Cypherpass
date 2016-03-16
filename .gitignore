@@ -3,3 +3,4 @@ nbproject/
 server
 bower_components/
 npm*
+test/test

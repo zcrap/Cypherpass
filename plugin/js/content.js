@@ -29,6 +29,9 @@ var signatureInputFeild = "signature";
 var keyLedgerSupport = "data-public_key_ledger";
 var publicKeySupport = "data-public_key_auth";
 
+//New autologin stuffs
+var autoLoginInputIdentifier = "data-public_key_auth_challenge";
+
 
 
 
@@ -173,6 +176,27 @@ function autoLogin(items) {
 			form.submit();
 		}
 	}
+
+
+	//New way.
+	////Find input with data-public_key_auth_challenge
+	//If exists, complete challenge and send it back.
+	var input = $("input[" + autoLoginInputIdentifier + "]");
+	if (input) {
+		//Get challenge value
+		items.message = input.attr(autoLoginInputIdentifier);
+		if (items.message) {
+			console.log("Found public key authentication challenge: " + items.message);
+			items = signMessage(items, function (items) {
+				return items;
+			});
+			input.val('{"public_key":"' + items.publicKey + '","challenge":"' + items.message + '","signed":"' + items.signed + '"}');
+			//Autosubmit the form
+			input.closest("form").submit();
+
+		}
+	}
+
 }
 
 

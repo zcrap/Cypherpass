@@ -12,9 +12,9 @@
 		<input type="text" name="lastname">
 		<br>
 		Public Key:<br>
-		<input name="public_key" id="public_key" data-public_key_ledger="true" data-public_key="true">
+		<input type="public_key" name="public_key" id="public_key">
 		<br>
 		Public Key:<br>
-		<input name="public_key" id="public_key" >
+		<input type="public_key" name="public_key" id="public_key">
 	</form>
 </html>

@@ -1,9 +1,3 @@
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-?>
-
 <!DOCTYPE html>
 <html>
 	<p>
@@ -11,13 +5,18 @@ error_reporting(E_ALL);
 		//http://localhost/dev/cypherpass/test/test_authentication.php
 
 
+		print("Signature: " . $_POST['signature'] . "<br />");
+
+
 		if (!empty($_POST['signature'])) {
-			print("Last input: " . $_POST['signature'] . "<br />");
-			$json = json_decode($_POST['signature']);
-			//$signature = explode("|", $_POST['signature']);
-			//var_dump($json);
-			$signature = $json->signed;
-			//print("Signature:" . $signature);
+			$signature = explode("|", $_POST['signature']);
+
+			if (count($signature) !== 2) {
+				die("Invalid signature");
+			} else {
+				$publicKey = $signature[1];
+				$signature = $signature[0];
+			}
 		}
 
 
@@ -31,7 +30,7 @@ error_reporting(E_ALL);
 
 
 	<form action="test_authentication.php" method="post"
-		  name="public_key_auth" data-public_key_challenge="<?php print($token); ?>">
+		  name="public_key_login" challenge="<?php print($token); ?>">
 		<input type="text" name="signature"><br>
 	</form>
 </html>

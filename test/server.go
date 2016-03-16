@@ -1,71 +1,32 @@
 package main
 
 import (
-	"encoding/json"
-	"errors"
+	//"encoding/json"
+	"flag"
+	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"regexp"
-	"strings"
 )
 
-type sig struct {
-	PK  string
-	SIG string
+var (
+	port = flag.String("port", ":8082", "Listening port for the server")
+)
+
+func init() {
+	flag.Parse()
 }
 
-var reqInURL = regexp.MustCompile("/?/g")
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Received Request: " + r.URL.Path)
 
-func (s *sig) populate(r *http.Request) error {
-	if reqInURL.FindString(r.URL.Path) != "" {
-		parts := strings.Split(":", r.URL.Path)
-		s.PK = parts[1]
-		s.SIG = parts[0]
-	} else {
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			log.Println(err)
-			return err
-		}
+	body, _ := ioutil.ReadAll(r.Body)
+	fmt.Println(body)
 
-		err = json.Unmarshal(body, &s)
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-
-	}
-	return nil
-}
-
-func parseBody(r *http.Request) (*sig, error) {
-	var data sig
-	if r.Body == nil {
-		log.Println("empty request!")
-		return nil, errors.New("empty request")
-	}
-
-	err := data.populate(r)
-	if err != nil {
-		return nil, err
-	}
-
-	return &data, nil
-}
-
-func handleReq(w http.ResponseWriter, r *http.Request) {
-	data, err := parseBody(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	log.Printf("pubKey: '%s' sig: '%s'", data.PK, data.SIG)
 }
 
 func main() {
-	log.Println("test server starting..")
-	http.HandleFunc("/", handleReq)
-	log.Fatal(http.ListenAndServe("localhost:8321", nil))
+	fmt.Println("listening on port: " + *port)
+
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(*port, nil)
 }

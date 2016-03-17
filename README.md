@@ -11,11 +11,11 @@ Cypherpass's Chrome browser extension can be found in the [Chrome Web Store](htt
 
 ### What Cypherpass **IS NOT**
  * Completely secure.
- * Better than TLS, OpenSSL, or other $secure_solution
+ * Better than TLS, OpenSSL, or other $secure_solution.
 
 ### What Cypherpass **IS**
- * Better than blinding trusting websites with password security
- * Better than security unconcerned users reusing passwords
+ * Better than blinding trusting websites with password security.
+ * Better than security unconcerned users reusing passwords.
 
 ### How does Cypherpass work?
 * Cypherpass initially generates a public/private keypair and saves it to
@@ -42,7 +42,7 @@ Here's an example valid input:
 }
 ```
 
-## How do Key Ledgers work?
+## How do key ledgers work?
 For expanded capabilites, supporting websites can use a key ledger to verify user public keys.
 * If the `public_key` input has an attribute of `data-public_key_ledger` set to `true`, Cypherpass can also provide a uri for a key ledger.
 * When authenticating, websites should verify with the key ledger that provided key is active.
@@ -83,7 +83,7 @@ private keys, is stored in plaintext.
   * Workaround from chrome storage constraint using third party services.
 * Multiple logins.
 * Support for client side certificates.
-* Support for SSH keys
+* Support for SSH keys.
 * TLS certificate abilities
 * Firefox support.
 * Internalization.

@@ -5,35 +5,32 @@
 
 Let's kill passwords.
 
-Cypherpass is a public key authentication application and aims secure online interactions through the use of public-key cryptography.  Cypherpass's believes passwords are inherently insecure and that public-key cryptography is the final solution for authentication.
+Cypherpass is a public key authentication application and aiming to secure online interactions through public-key cryptography.  Cypherpass believes passwords are inherently insecure and that public-key cryptography is the final solution for authentication.
 
 Cypherpass's Chrome browser extension can be found in the [Chrome Web Store](https://chrome.google.com/webstore/detail/cypherpass/mafcgnpkgiapmmbjcfffhognhcedfpng) and is publicly available for free download.
-
-
 
 ### What Cypherpass **IS NOT**
  * Completely secure.
  * Better than TLS, OpenSSL, or other $secure_solution
 
 ### What Cypherpass **IS**
- * Sometimes better than security unconcerned users reusing passwords
-   and blinding trusting websites with password security.
+ * Better than blinding trusting websites with password security
+ * Better than security unconcerned users reusing passwords
 
 ### How does Cypherpass work?
 * Cypherpass initially generates a public/private keypair and saves it to
   Google's cloud storage syncing all instances.
 * Cypherpass autofills form inputs either with a name `public_key` or an attribute `data-public_key`.  This input can be visible or hidden.
-* Supporting websites associate a user's public key with their login, just like a password.
-* When authenticating a website provides a random token.
+* Just like passwords, supporting websites associate a user's public key with their login.
+* When authenticating a website provides a unique token.
 * Cypherpass cryptographically signs the token.
 * The website verifies the cryptographic signature thereby authenticating the user.
 
 ### How does autologin work?
-* Cypherpass looks for a form named `public_key_auth`
-* Form should have an attribute named `data-public_key_challenge` with a randomly generated value.
-  * For example:  "a319237c42162360a711f6a3ef790625"
+* Cypherpass looks for an input with an attribute named `data-public_key_auth_challenge`.
+  * This should be a unique value, for example:  "a319237c42162360a711f6a3ef790625"
 * Cypherpass signs the challenge and inserts the public
-  key `public_key`, challenge `challenge`, and signature `signed` as json into the form input named `signature`.
+  key `public_key`, challenge `challenge`, and signature `signed` as json into the input.
 * Cypherpass submits the form for login.
 
 Here's an example valid input:
@@ -46,14 +43,14 @@ Here's an example valid input:
 ```
 
 ## How do Key Ledgers work?
-So that users can use many keys across many devices, supporting websites can use a key ledger to lookup public keys, instead of storing keys at each individual website.
-* If the `public_key` input has an attribute of `data-public_key_ledger` set to `true`, Cypherpass will also provide a uri for a key ledger.
-* When authenticating, the website should look at the key ledger an verify that the key is active.
+For expanded capabilites, supporting websites can use a key ledger to verify user public keys.
+* If the `public_key` input has an attribute of `data-public_key_ledger` set to `true`, Cypherpass can also provide a uri for a key ledger.
+* When authenticating, websites should verify with the key ledger that provided key is active.
 
 ## Advantages of using a key ledger
 * Each device can have their own set of keys.
 * No need to update website with keys.
-* Users can revoke keys they suspect are compromised.
+* Users can revoke or update keys they suspect are compromised.
 * Key ledgers can store many keys for the user.
 
 ### Hopes
@@ -63,7 +60,6 @@ So that users can use many keys across many devices, supporting websites can use
    passwords entirely.
 
 ### Features/Behavior
-* Autofill forms with a type, "public_key"
 * Cypherpass will not autologin if the page is asking for public key.
 
 ### Known Issues And Concerns
@@ -71,7 +67,6 @@ So that users can use many keys across many devices, supporting websites can use
 private keys, is stored in plaintext.
 
 ### //TODO
-* Migrate messaging to json
 * In browser extension unit testing.
 * Support key ledger autofill
 * Support many key ledgers.
@@ -89,6 +84,7 @@ private keys, is stored in plaintext.
 * Multiple logins.
 * Support for client side certificates.
 * Support for SSH keys
+* TLS certificate abilities
 * Firefox support.
 * Internalization.
 * Mobile.

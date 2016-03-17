@@ -15,16 +15,16 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-		<link href="css/signin.css" rel="stylesheet">
+		<link href="/css/signin.css" rel="stylesheet">
 
 
 		<title>Cypherpass Login Test</title>
 	</head>
 	<body>
 		<div class="container">
-			<img src="img/cypher_128.png" alt="Smiley face" height="128" width="128">
+			<img src="/img/cypher_128.png" alt="Smiley face" height="128" width="128">
 			<h1>Cypherpass</h1>
-			<form class="form-signin" method="post" action="test_authentication.php">
+			<form class="form-signin" method="post" action="logged_in.html">
 				<h4 class="form-signin-heading">Sign In</h4>
 				<label for="inputEmail" class="sr-only">Email address</label>
 				<input type="email" id="inputEmail" class="form-control" placeholder="Email address"  autofocus />
@@ -40,10 +40,13 @@
 				-->
 
 				<h4 class="form-signin-heading">...or just use Cypherpass</h4>
+				
 				<label for="signature" class="sr-only">Cypherpass</label>
 				<input type="text" class="form-control" name="signature" placeholder="Cypherpass"
-					   data-public_key_auth_challenge="a33ee02bb9ec132658179945c2fc4e580f8ba4b853a7ad0a53f153f513e921cf">
+					   data-public_key_auth_challenge="{{.Vars.challenge}}">
+<small>{{.Vars.challenge}}</small>
 				<br />
+
 
 
 				<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>

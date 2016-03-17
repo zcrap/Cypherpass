@@ -22,8 +22,11 @@ function restore_options(items, callback) {
 
 	//Get saved options first, then set GUI.
 	items = get_saved(function (items) {
+		//Console log items here to see saved settings to console.
 		document.getElementById('autofill').checked = items.autofill;
-		document.getElementById('autologin').checked = items.autologin;
+		$('#autologinFill').prop('checked', items.autologinFill);
+		$('#autologinSubmit').prop('checked', items.autologinSubmit);
+
 		document.getElementById('publicKey').textContent = items.publicKey;
 		//Key Ledger
 		document.getElementById('enableKeyLedger').checked = items.enableKeyLedger;
@@ -67,13 +70,13 @@ function save_options() {
 	var items = {};
 	//Cypherpass behavior.
 	items.autofill = document.getElementById('autofill').checked;
-	items.autologin = document.getElementById('autologin').checked;
+	items.autologinFill = $('#autologinFill').is(':checked');
+	items.autologinSubmit = $('#autologinSubmit').is(':checked');
 
 	//Key Ledger
 	items.enableKeyLedger = document.getElementById('enableKeyLedger').checked;
 	items.keyLedgerUrl = document.getElementById('keyLedgerUrl').value;
 	items.keyLedgerVerified = $("#keyLedgerVerified").attr("value");
-	console.log("Saving ledger status" + $("#keyLedgerVerified").attr("value"));
 
 	update_status('Saving....');
 	console.log("Saving items.keyLedgerUrl: " + items.keyLedgerUrl);
@@ -134,7 +137,7 @@ function option_verify_signature() {
 	}
 
 	//Support "challenge" terminology as well.
-	//Message to overwrite if exists.  
+	//Message to overwrite if exists.
 	if (json.challenge) {
 		items.message = json.challenge;
 	}
@@ -369,7 +372,9 @@ function option_page() {
 	//Auto save
 	////////
 	document.getElementById('autofill').addEventListener("change", save_options);
-	document.getElementById('autologin').addEventListener("change", save_options);
+
+	$('#autologinFill').change(save_options);
+	$('#autologinSubmit').change(save_options);
 
 	document.getElementById('enableKeyLedger').addEventListener("change", save_options);
 	document.getElementById('keyLedgerUrl').addEventListener("input", save_options);

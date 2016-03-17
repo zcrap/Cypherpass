@@ -150,35 +150,12 @@ function autoFill(items) {
 
 
 function autoLogin(items) {
+
 	//If the user has disabled autologin in the settings don't run
-	if (!items.autologin === true) {
+	if (!items.autologinFill === true) {
 		return false;
 	}
 
-	//get the auto login form.
-	var form = document.getElementsByName(autoLoginFormName)[0];
-	if (form) {
-
-		items.message = form.getAttribute(formChallengeAttr);
-		inputFeild = document.getElementsByName(signatureInputFeild)[0];
-		if (items.message && inputFeild) {
-
-			items = signMessage(items, function (items) {
-				return items;
-			});
-
-			console.log("Challenge: " + items.message);
-			console.log("Signed message: " + items.signed);
-			json = {"public_key": items.publicKey, "challenge": items.message, "signed": items.signed};
-			json = JSON.stringify(json);
-			//inputFeild.value = items.publicKey + "|" + items.signed;
-			inputFeild.value = json;
-			form.submit();
-		}
-	}
-
-
-	//New way.
 	////Find input with data-public_key_auth_challenge
 	//If exists, complete challenge and send it back.
 	var input = $("input[" + autoLoginInputIdentifier + "]");
@@ -192,11 +169,11 @@ function autoLogin(items) {
 			});
 			input.val('{"public_key":"' + items.publicKey + '","challenge":"' + items.message + '","signed":"' + items.signed + '"}');
 			//Autosubmit the form
-			input.closest("form").submit();
-
+			if (items.autologinSubmit === true) {
+				input.closest("form").submit();
+			}
 		}
 	}
-
 }
 
 

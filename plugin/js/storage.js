@@ -3,7 +3,8 @@ var presets = {
 	privateKey: false,
 	publicKey: false,
 	autofill: true,
-	autologin: true,
+	autologinFill: true,
+	autologinSubmit: true,
 	enableKeyLedger: true,
 	keyLedgerUrl: null,
 	keyLedgerVerified: false
@@ -37,7 +38,8 @@ function save_settings(items, callback) {
 		privateKey: items.privateKey,
 		publicKey: items.publicKey,
 		autofill: items.autofill,
-		autologin: items.autologin,
+		autologinFill: items.autologinFill,
+		autologinSubmit: items.autologinSubmit,
 		enableKeyLedger: items.enableKeyLedger,
 		keyLedgerUrl: items.keyLedgerUrl,
 		keyLedgerVerified: items.keyLedgerVerified

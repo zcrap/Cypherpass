@@ -8,7 +8,7 @@ import (
 	"math/rand"
 	"net/http"
 	"net/url"
-	//cypher "test/cypherpass"
+	cypher "test/cypherpass"
 )
 
 var (
@@ -33,8 +33,8 @@ func init() {
 }
 
 func main() {
-	//cypher.Hello()
-	//cypher.Run()
+	cypher.Hello()
+	cypher.Test()
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/login/", viewHandler)
 	fmt.Println("Listening on " + *port)

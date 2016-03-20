@@ -75,6 +75,7 @@ private keys, is stored in plaintext.
 * Rate limit auto login, allow user to configure this in options page.
 * Test server.
 * Option to autofill/login on https only.
+* JSON-RPC, gRPC, or other RPC
 
 ### Wishlist
 * Third party signature server

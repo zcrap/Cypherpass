@@ -3,60 +3,67 @@ package cypherpass
 import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
-
 	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 
-	"math/big"
+	"github.com/btcsuite/btcd/btcec"
 )
 
-func Hello() {
-	fmt.Println("Hello")
-}
+func Test() {
+	var (
+		sigHex  = "304402205cd69d7989146773abaa95586630f9942b35e11caff280425ce18afe9878c9db022030ced5d604b2e93dc105b294406e2b824d90121ed514cab33b2b8ab3d1eaf281"
+		pubHex  = "047eb9a9cd3722a4977320da2f733343c4c585376cf3f39fa7fa029eb6a9f750e39982f16cca04a3674ba8a2867d6fa6198826efb08663f6fd987770d814dab137"
+		message = "a"
+	)
 
-/*
-type PublicKey struct {
-	elliptic.Curve
-	X, Y *big.Int
-}
-
-
-{
-."public_key":"045cf87f895a5e3a2e426400a5439be79d6639a9259908adfc4f8bbee42de46b3a7fa552ed41f8d8461de826c716b5cd19c044e08cb0588e3831cc24910a287867",
-"message":"a",
-"signed":"3045022100fc1f6440e4d31dca44de581048816f149be33c0033cde98d0b80cf153725ace002200ba2f0e4c1723245d28b85d5b156f1789386541a057f24a42e7f3b7038a4cdb1"
-}
-
-*/
-
-func Run() {
-
-	//We are going to get the hex encoded values.
-	//Need to convert for this.
-	//https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html#.verifyHex
-
-	pubkeyCurve := elliptic.P256()
-	h := sha256.New()
-
-	//two points of the sig
-	var x, y *big.Int
-
-	var pubkey ecdsa.PublicKey
-	pubkey = ecdsa.PublicKey{
-		pubkeyCurve,
-		x, y,
+	//Pubkey
+	//Decode Hex
+	pubConcat, err := hex.DecodeString(pubHex)
+	if err != nil {
+		panic("Invalid hexidecimal string: " + err.Error() + ", string: " + pubHex)
+	}
+	//Parse
+	pubKey, err := btcec.ParsePubKey(pubConcat, btcec.S256())
+	if err != nil {
+		panic("Unable to parse public key: " + err.Error() + ", string: " + string(pubConcat))
 	}
 
-	// Sign ecdsa style
-	r := big.NewInt(0)
-	s := big.NewInt(0)
+	//Hashed
+	hashed32 := sha256.Sum256([]byte(message))
+	var hashed []byte = hashed32[0:32]
 
-	signature := r.Bytes()
-	signature = append(signature, s.Bytes()...)
+	//Sig
+	sigConcat, err := hex.DecodeString(sigHex)
+	if err != nil {
+		panic("Invalid hexidecimal string: " + err.Error() + ", string: " + sigHex)
+	}
 
-	fmt.Printf("Signature : %x\n", signature)
+	//Specify the curve
+	curve := elliptic.P256()
+	//Parse the signature
+	sig, err := btcec.ParseDERSignature(sigConcat, curve)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
-	// Verify
-	verifystatus := ecdsa.Verify(&pubkey, signhash, r, s)
-	fmt.Println(verifystatus) // should be true
+	//Pub key, hash, r, s
+	ecdsaPubKey := pubKey.ToECDSA()
+	verified := ecdsa.Verify(ecdsaPubKey, hashed, sig.R, sig.S)
+
+	//Print Outs
+	fmt.Print("Pubkey bytes: ")
+	fmt.Println(pubConcat)
+	fmt.Print("Pubkey parsed: ")
+	fmt.Println(pubKey)
+	fmt.Println("Message: " + message)
+	fmt.Print("Message Hashed: ")
+	fmt.Println(hashed)
+	fmt.Println(sigConcat)
+	fmt.Print("R: ")
+	fmt.Println(sig.R)
+	fmt.Print("S: ")
+	fmt.Println(sig.S)
+
+	fmt.Println(verified)
 }

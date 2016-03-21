@@ -1,55 +1,34 @@
 
 
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<!--jquery-->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+{{.Page.Header}}
+<div class="container">
+	<img src="/img/cypher_128.png" alt="Smiley face" height="128" width="128">
+	<h1>Cypherpass</h1>
+	<form class="form-signin" method="post" action="logged_in.html">
+		<h4 class="form-signin-heading">Sign In</h4>
+		<label for="inputEmail" class="sr-only">Email address</label>
+		<input type="email" id="inputEmail" class="form-control" placeholder="Email address"  autofocus />
+		<label for="inputPassword" class="sr-only">Password</label>
+		<input type="password" id="inputPassword" class="form-control" placeholder="Password"  />
 
-		<!------Bootstrap---------->
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-		<!-- Optional theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<!--
+		<div class="checkbox">
+			<label>
+				<input type="checkbox" value="remember-me"> Remember me
+			</label>
+		</div>
+		-->
 
-		<link href="/css/signin.css" rel="stylesheet">
+		<h4 class="form-signin-heading">...or just use Cypherpass</h4>
 
-
-		<title>Cypherpass Login Test</title>
-	</head>
-	<body>
-		<div class="container">
-			<img src="/img/cypher_128.png" alt="Smiley face" height="128" width="128">
-			<h1>Cypherpass</h1>
-			<form class="form-signin" method="post" action="logged_in.html">
-				<h4 class="form-signin-heading">Sign In</h4>
-				<label for="inputEmail" class="sr-only">Email address</label>
-				<input type="email" id="inputEmail" class="form-control" placeholder="Email address"  autofocus />
-				<label for="inputPassword" class="sr-only">Password</label>
-				<input type="password" id="inputPassword" class="form-control" placeholder="Password"  />
-
-				<!--
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" value="remember-me"> Remember me
-					</label>
-				</div>
-				-->
-
-				<h4 class="form-signin-heading">...or just use Cypherpass</h4>
-				
-				<label for="signature" class="sr-only">Cypherpass</label>
-				<input type="text" class="form-control" name="signature" placeholder="Cypherpass"
-					   data-public_key_auth_challenge="{{.Vars.challenge}}">
-<small>{{.Vars.challenge}}</small>
-				<br />
+		<label for="signature" class="sr-only">Cypherpass</label>
+		<input type="text" class="form-control" name="signature" placeholder="Cypherpass"
+			   data-public_key_auth_challenge="{{.Vars.challenge}}">
+		<small>{{.Vars.challenge}}</small>
+		<br />
 
 
 
-				<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-			</form>
-	</body>
-</html>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+	</form>
+	{{.Page.Footer}}

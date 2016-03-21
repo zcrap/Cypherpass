@@ -5,6 +5,7 @@ import (
 	"crypto/elliptic"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 
 	"github.com/btcsuite/btcd/btcec"
@@ -17,16 +18,22 @@ func Test() {
 		message = "a"
 	)
 
+	_, _ = VerifySigHex(pubHex, message, sigHex)
+}
+
+func VerifySigHex(pubHex, message, sigHex string) (bool, error) {
 	//Pubkey
 	//Decode Hex
 	pubConcat, err := hex.DecodeString(pubHex)
 	if err != nil {
-		panic("Invalid hexidecimal string: " + err.Error() + ", string: " + pubHex)
+
+		return false, errors.New("Invalid hexidecimal string: " + err.Error() + ", string: " + pubHex)
 	}
 	//Parse
 	pubKey, err := btcec.ParsePubKey(pubConcat, btcec.S256())
 	if err != nil {
-		panic("Unable to parse public key: " + err.Error() + ", string: " + string(pubConcat))
+
+		return false, errors.New("Unable to parse public key: " + err.Error() + ", string: " + string(pubConcat))
 	}
 
 	//Hashed
@@ -36,7 +43,7 @@ func Test() {
 	//Sig
 	sigConcat, err := hex.DecodeString(sigHex)
 	if err != nil {
-		panic("Invalid hexidecimal string: " + err.Error() + ", string: " + sigHex)
+		return false, errors.New("Invalid hexidecimal string: " + err.Error() + ", string: " + sigHex)
 	}
 
 	//Specify the curve
@@ -66,4 +73,6 @@ func Test() {
 	fmt.Println(sig.S)
 
 	fmt.Println(verified)
+
+	return verified, nil
 }

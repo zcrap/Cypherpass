@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"net/http"
 	"strings"
@@ -17,11 +18,11 @@ var (
 	letters = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_") //Used for random string generation
 	//File structure vars.
 	//Should NOT include slashes.
-	//directory to serve files from.
 	dir          = "login"
 	header       = "header.html"
 	footer       = "footer.html"
 	pageNotFound = "404.html"
+	startPage    = "login.html"
 
 	//Valid static resources.  Dirs should include preceding /.
 	servs = []string{"/css", "/img"}
@@ -43,14 +44,14 @@ func init() {
 	flag.Parse()
 }
 
-type sc struct {
-	PublicKey string
-	Challenge string
-	Signature string
+//Signed challenge.
+type SC struct {
+	PublicKey string `json:"public_key"`
+	Signed    string `json:"signed"`
+	Challenge string `json:"challenge"`
 }
 
 func main() {
-	cypher.Test()
 	http.HandleFunc("/", handler)
 	fmt.Println("Listening on " + *port)
 
@@ -61,8 +62,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	file := r.URL.Path
 	fmt.Println("Received Request: " + file)
 
-	sevFile := false
+	if file == "/" {
+		http.Redirect(w, r, startPage, 301)
+	}
 
+	//Static resources or template.
+	sevFile := false
 	for _, v := range servs {
 		if strings.HasPrefix(file, v) {
 			sevFile = true
@@ -70,9 +75,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if sevFile {
+		//asking for a static resource
 		http.ServeFile(w, r, dir+file)
 	} else {
-		//Asking for a template
+		//Try to fill request with template
 		servTemplate(w, r)
 	}
 
@@ -81,42 +87,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func servTemplate(w http.ResponseWriter, r *http.Request) {
 	file := r.URL.Path
 
-	r.ParseForm()
+	c := getTVars(r)
 
-	//Print all values in Form
-	//	for k, v := range r.Form {
-	//		fmt.Println("key:", k)
-	//		fmt.Println("val:", strings.Join(v, ""))
-	//	}
-
-	//	var dat map[string]interface{
-	//		Public
-	//	}
-
-	var dat struct {
-		PublicKey string `json:"public_key"`
-		Signed    string `json:"signed"`
-		Challenge string `json:"challenge"`
-	}
-
-	//PANIC KILL THIS
-
-	if err := json.Unmarshal([]byte(r.Form["signature"][0]), &dat); err != nil {
-		fmt.Println(err.Error())
-	} else {
-		v, err := cypher.VerifySigHex(dat.PublicKey, dat.Challenge, dat.Challenge)
-		fmt.Println("key verified: ", v, err)
-	}
-
-	//	var dat map[string]interface{}
-	//	if err := json.Unmarshal([]byte(r.Form["signature"][0]), &dat); err != nil {
-	//		fmt.Println(err.Error())
-	//	} else {
-	//		fmt.Println(dat)
-	//	}
-
-	//Vars to pass into the template
-	c := map[string]string{"challenge": randSeq(50), "body": ""}
 	p, err := loadPage(file)
 	if err != nil {
 		fmt.Println("Error Loading page: ", err.Error())
@@ -128,11 +100,32 @@ func servTemplate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Error rendering template: ", err.Error())
 	}
-
 }
 
-func servFile(w http.ResponseWriter, r *http.Request) {
+//Get template vars
+func getTVars(r *http.Request) (c map[string]string) {
+	r.ParseForm()
 
+	sig := r.FormValue("signature")
+	fmt.Println("sig: ", sig)
+	var ver string
+	var dat SC
+
+	if err := json.Unmarshal([]byte(sig), &dat); err != nil {
+		fmt.Println(err.Error())
+	} else {
+		v, err := cypher.VerifySigHex(dat.PublicKey, dat.Challenge, dat.Signed)
+		if err == nil && v == true {
+			fmt.Println("key verified: ", v)
+			ver = "Signature Verified"
+		} else {
+			log.Println("Signature not verified.", dat.Signed)
+
+		}
+	}
+
+	c = map[string]string{"challenge": randSeq(50), "body": "", "signature_verified": ver}
+	return c
 }
 
 //Read the page into memory.
@@ -177,48 +170,4 @@ func randSeq(n int) string {
 		b[i] = letters[rand.Intn(len(letters))]
 	}
 	return string(b)
-}
-
-func viewHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Received Request: " + r.URL.Path)
-
-	fmt.Println("method:", r.Method) //get request method
-	if r.Method == "GET" {
-		handler(w, r)
-	} else {
-		r.ParseForm()
-		// logic part of log in
-		fmt.Println("username:", r.Form["username"])
-		fmt.Println("password:", r.Form["password"])
-		fmt.Println("bob:", r.Form["bob"])
-		fmt.Println("signature:", r.Form["signature"])
-
-		fmt.Println("Body: ", r.Body)
-	}
-
-	//Load the html template file
-	//file := r.URL.Path[len("/login/"):]
-	file := r.URL.Path[1:]
-	p, _ := loadPage(file)
-
-	fmt.Print("body:/n ", r.Body)
-
-	//Print all values in Form
-	for k, v := range r.Form {
-		fmt.Println("key:", k)
-		fmt.Println("val:", strings.Join(v, ""))
-	}
-
-	var dat map[string]interface{}
-	if err := json.Unmarshal([]byte(r.Form["signature"][0]), &dat); err != nil {
-		fmt.Println(err.Error())
-	} else {
-		fmt.Println(dat)
-	}
-
-	c := map[string]string{"challenge": randSeq(50), "body": string("bob")}
-
-	data := &Template{p, c}
-
-	renderTemplate(w, data)
 }

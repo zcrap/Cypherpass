@@ -11,19 +11,12 @@
 		<label for="inputPassword" class="sr-only">Password</label>
 		<input type="password" id="inputPassword" class="form-control" placeholder="Password"  />
 
-		<!--
-		<div class="checkbox">
-			<label>
-				<input type="checkbox" value="remember-me"> Remember me
-			</label>
-		</div>
-		-->
 
 		<h4 class="form-signin-heading">...or just use Cypherpass</h4>
 
 		<label for="signature" class="sr-only">Cypherpass</label>
 		<input type="text" class="form-control" name="signature" placeholder="Cypherpass"
-			   data-public_key_auth_challenge="{{.Vars.challenge}}">
+			   data-public_key_auth_challenge="{{.Vars.challenge}}" hidden>
 		<small>{{.Vars.challenge}}</small>
 		<br />
 

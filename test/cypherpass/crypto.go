@@ -32,7 +32,6 @@ func VerifySigHex(pubHex, message, sigHex string) (bool, error) {
 	//Parse
 	pubKey, err := btcec.ParsePubKey(pubConcat, btcec.S256())
 	if err != nil {
-
 		return false, errors.New("Unable to parse public key: " + err.Error() + ", string: " + string(pubConcat))
 	}
 
@@ -59,20 +58,15 @@ func VerifySigHex(pubHex, message, sigHex string) (bool, error) {
 	verified := ecdsa.Verify(ecdsaPubKey, hashed, sig.R, sig.S)
 
 	//Print Outs
-	fmt.Print("Pubkey bytes: ")
-	fmt.Println(pubConcat)
-	fmt.Print("Pubkey parsed: ")
-	fmt.Println(pubKey)
-	fmt.Println("Message: " + message)
-	fmt.Print("Message Hashed: ")
-	fmt.Println(hashed)
-	fmt.Println(sigConcat)
-	fmt.Print("R: ")
-	fmt.Println(sig.R)
-	fmt.Print("S: ")
-	fmt.Println(sig.S)
+	fmt.Println("Pubkey bytes: ", pubConcat)
+	fmt.Println("Pubkey parsed: ", pubKey)
+	fmt.Println("Message:", message)
+	fmt.Println("Message Hashed:", hashed)
+	fmt.Println("SigConcat:", sigConcat)
+	fmt.Println("R:", sig.R)
+	fmt.Println("S:", sig.S)
 
-	fmt.Println(verified)
+	fmt.Println("Verified:", verified)
 
 	return verified, nil
 }

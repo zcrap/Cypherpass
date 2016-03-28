@@ -1,0 +1,26 @@
+
+
+{{.Page.Header}}
+<div class="container">
+	<img src="/img/cypher_128.png" alt="Smiley face" height="128" width="128">
+	<h1>Cypherpass</h1>
+	<form class="form-signin" method="post" action="logged_in.html">
+		<h4 class="form-signin-heading">Sign In</h4>
+		<label for="inputEmail" class="sr-only">Email address</label>
+		<input type="email" id="inputEmail" class="form-control" placeholder="Email address"  autofocus />
+		<label for="inputPassword" class="sr-only">Password</label>
+		<input type="password" id="inputPassword" class="form-control" placeholder="Password"  />
+
+
+		<h4 class="form-signin-heading">...or just use Cypherpass</h4>
+
+		<label for="signature" class="sr-only">Cypherpass</label>
+		<input type="hidden" class="form-control" name="signature" placeholder="Cypherpass"
+			   data-public_key_auth_challenge="{{.Vars.challenge}}" >
+		<br />
+
+
+
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+	</form>
+	{{.Page.Footer}}

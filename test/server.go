@@ -120,6 +120,7 @@ func getTVars(r *http.Request) (c map[string]string) {
 			ver = "Signature Verified"
 		} else {
 			log.Println("Signature not verified.", dat.Signed)
+			ver = "Signature Invalid"
 
 		}
 	}

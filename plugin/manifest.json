@@ -4,6 +4,12 @@
 	"description": "Public key authenticator.",
 	"version": "0.1.0.4",
 	"short_name": "Cypherpass",
+	"applications": {
+		"gecko": {
+			"id": "cypherpass",
+			"strict_min_version": "45.0.0"
+		}
+	},
 	"content_scripts": [
 		{
 			"matches": [

@@ -15,7 +15,7 @@ import (
 
 var (
 	port    = flag.String("port", ":8080", "Listening port for the server")
-	letters = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_") //Used for random string generation
+	letters = []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-") //Used for random string generation
 	//File structure vars.
 	//Should NOT include slashes.
 	dir          = "login"

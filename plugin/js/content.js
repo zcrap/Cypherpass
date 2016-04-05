@@ -32,7 +32,8 @@ var publicKeySupport = "data-public_key_auth";
 //New autologin stuffs
 var autoLoginInputIdentifier = "data-public_key_auth_challenge";
 
-
+//Storage
+var storage = new cpd()
 
 
 
@@ -48,14 +49,16 @@ if (document.title !== "Cypherpass Options") {
 
 //Get saved settings and run rest of Cypherpass
 function start(callback) {
-	//get saved options.
-	get_saved(function (items) {
 
+
+
+	//get saved options.
+	storage.get_saved(function (items) {
 		//Do we have saved settings?
 		//If empty, we havn't saved yet.
 		//
 		//Make sure "items" is initilized first with empty values.
-		//running "get_saved" first initilizes empty "items"
+		//running "cpd.get_saved" first initilizes empty "items"
 		if (!items.privateKey || !items.publicKey) {
 			console.log(
 					"Unable to retreive key pair.",

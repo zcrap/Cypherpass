@@ -20,7 +20,7 @@ function refresh_gui(callback) {
 function restore_options(items, callback) {
 
 	//Get saved options first, then set GUI.
-	items = get_saved(function (items) {
+	items = storage.get_saved(function (items) {
 		//Console log items here to see saved settings to console.
 		document.getElementById('autofill').checked = items.autofill;
 		$('#autologinFill').prop('checked', items.autologinFill);
@@ -108,7 +108,7 @@ function set_blank_status() {
 
 //Sign a message manually in the options page.
 function sign_message() {
-	get_saved(function (items) {
+	storage.get_saved(function (items) {
 		update_status("Signing...");
 		items.message = document.getElementById('messageToSign').value;
 
@@ -204,7 +204,7 @@ function newKeyPairOption() {
 //show the private key
 function show_private_key() {
 	update_status('Getting private key....');
-	get_saved(function (items) {
+	storage.get_saved(function (items) {
 		document.getElementById('privateKey').textContent = items.privateKey;
 		document.getElementById('showPrivateKey').style.display = 'none';
 		set_blank_status();
@@ -245,7 +245,7 @@ function key_ledger_verify() {
 	var transaction = {};
 	cyphernode.generate_transaction_json(transaction);
 
-	get_saved(function (items) {
+	storage.get_saved(function (items) {
 		console.log("Verifing Key Ledger...");
 		items.input = items.publicKey;
 		items.output = items.publicKey;

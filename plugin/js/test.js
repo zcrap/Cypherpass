@@ -11,7 +11,7 @@ function test_page() {
 	});
 
 	//Get current saved settigns and run tests.
-	get_saved(run_tests);
+	storage.get_saved(run_tests);
 }
 
 function run_tests(items) {
@@ -117,7 +117,7 @@ function new_test_object(name) {
 /////////////////
 function test_get_saved(test, items, callback) {
 
-	get_saved(function (items) {
+	storage.get_saved(function (items) {
 		test.message = items;
 
 		if (

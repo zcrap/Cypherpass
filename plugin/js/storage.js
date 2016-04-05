@@ -1,5 +1,13 @@
+var cpd = function () {
+	this.type = "";
+
+	if (window.chrome && chrome.runtime && chrome.runtime.id) {
+		this.type = "chrome";
+	}
+};
+
 //array of initial settings
-var presets = {
+cpd.prototype.presets = {
 	privateKey: false,
 	publicKey: false,
 	autofill: true,
@@ -10,13 +18,38 @@ var presets = {
 	keyLedgerVerified: false
 };
 
-// Gets all saved options stored in chrome.storage.
-// Returns all the saved options.
-function get_saved(callback) {
+
+cpd.prototype.get_presets = function () {
+	return this.presets;
+};
+
+// Take a key and a value.. pass the result of "storing" to fn
+cpd.prototype.store = function (key, val, fn) {
+	if (this.type === "chrome") {
+		//chrome.store
+	}
+};
+
+
+// Take a key and a value.. pass the result of "storing" to fn
+cpd.prototype.get_saved = function (callback) {
+	if (this.type === "chrome") {
+		return this.chrome_get_saved(callback);
+	}
+};
+
+cpd.prototype.save_settings = function (items, callback) {
+	if (this.type === "chrome") {
+		return this.chrome_save_settings(items, callback);
+	}
+};
+
+// Take a key and a value.. pass the result of "storing" to fn
+cpd.prototype.chrome_get_saved = function (callback) {
 	chrome.storage.sync.get(
 			//object with Key:value pair of settings.
 			//Saved will overwrite preset value.
-			presets,
+			this.presets,
 			//callback or return
 					function (items) {
 						//callback or return
@@ -26,12 +59,13 @@ function get_saved(callback) {
 							return items;
 						}
 					});
-		}
+		};
 
 
-// Save all options
+
+cpd.prototype.chrome_save_settings = function (items, callback) {
+	// Save all options
 // stored in chrome.storage.
-function save_settings(items, callback) {
 
 	//If undefined value, setting will not be saved.
 	chrome.storage.sync.set({
@@ -52,15 +86,5 @@ function save_settings(items, callback) {
 			return items;
 		}
 	});
-
-}
-
-//Get key:value array of all of our names variables
-//value is default values.
-function get_defaults() {
-	return presets;
-}
-
-
-
+};
 

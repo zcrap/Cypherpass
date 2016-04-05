@@ -49,9 +49,6 @@ if (document.title !== "Cypherpass Options") {
 
 //Get saved settings and run rest of Cypherpass
 function start(callback) {
-
-
-
 	//get saved options.
 	storage.get_saved(function (items) {
 		//Do we have saved settings?
@@ -73,7 +70,6 @@ function start(callback) {
 			//Run the rest of Cypherpass
 			run(items, callback);
 		}
-
 	});
 }
 
@@ -107,7 +103,7 @@ function newKeyPair(items, callback) {
 	items.publicKey = "";
 
 	//Generate new keys and save them.
-	return save_settings(generateKeys(items), callback);
+	return storage.save_settings(generateKeys(items), callback);
 }
 
 //generate new key pair.

@@ -81,7 +81,7 @@ function save_options() {
 	console.log("Saving items.keyLedgerUrl: " + items.keyLedgerUrl);
 
 	//save options using save settings in storage.js
-	save_settings(items, update_status('Settings Saved'));
+	storage.save_settings(items, update_status('Settings Saved'));
 }
 
 
@@ -128,10 +128,13 @@ function option_verify_signature() {
 	items.message = document.getElementById('verifyMessageMessage').value;
 
 	//allow the first feild to have json object input with all components
-	json = JSON.parse(items.publicKey);
+	try {
+		json = JSON.parse(items.publicKey);
+	} catch (e) {
+		//It's not json.
+	}
 
 	if (json.public_key) {
-		console.log("got public key: " + json.public_key);
 		items.publicKey = json.public_key;
 	}
 
@@ -230,7 +233,7 @@ function import_key_pair() {
 
 	if (verified) {
 		//Save the new key pair and update the options page.
-		save_settings(items, function () {
+		storage.save_settings(items, function () {
 			refresh_gui(update_status('Imported new key pair.'));
 		});
 	} else {

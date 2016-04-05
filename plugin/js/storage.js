@@ -7,6 +7,8 @@ var cpd = function () {
 };
 
 //array of initial settings
+//The name (key) is what will be used to save in storage AND the name
+//used in the items array.
 cpd.prototype.presets = {
 	privateKey: false,
 	publicKey: false,
@@ -23,13 +25,6 @@ cpd.prototype.get_presets = function () {
 	return this.presets;
 };
 
-// Take a key and a value.. pass the result of "storing" to fn
-cpd.prototype.store = function (key, val, fn) {
-	if (this.type === "chrome") {
-		//chrome.store
-	}
-};
-
 
 // Take a key and a value.. pass the result of "storing" to fn
 cpd.prototype.get_saved = function (callback) {
@@ -39,6 +34,7 @@ cpd.prototype.get_saved = function (callback) {
 };
 
 cpd.prototype.save_settings = function (items, callback) {
+	//TODO sanitize items before saving.
 	if (this.type === "chrome") {
 		return this.chrome_save_settings(items, callback);
 	}
@@ -68,17 +64,7 @@ cpd.prototype.chrome_save_settings = function (items, callback) {
 // stored in chrome.storage.
 
 	//If undefined value, setting will not be saved.
-	chrome.storage.sync.set({
-		privateKey: items.privateKey,
-		publicKey: items.publicKey,
-		autofill: items.autofill,
-		autologinFill: items.autologinFill,
-		autologinSubmit: items.autologinSubmit,
-		enableKeyLedger: items.enableKeyLedger,
-		keyLedgerUrl: items.keyLedgerUrl,
-		keyLedgerVerified: items.keyLedgerVerified
-
-	}, function () {
+	chrome.storage.sync.set(items, function () {
 		//callback or return
 		if (typeof callback === 'function') {
 			callback(items);
@@ -87,4 +73,19 @@ cpd.prototype.chrome_save_settings = function (items, callback) {
 		}
 	});
 };
+
+//
+cpd.prototype.pair_settings = function (items) {
+	console.log("start pair settings");
+	keys = Object.keys(this.presets);
+
+	kv = {};
+
+	for (index = 0; index < keys.length; ++index) {
+		console.log(keys[index]);
+		console.log(items[keys[index]]);
+		kv[keys[index]] = items[keys[index]];
+	}
+	console.log(kv);
+}
 

@@ -18,11 +18,14 @@ var cyphernode = {
 
 		//design the transaction object.
 		var trans = {
-			"transaction": {
-				"input": items.input,
-				"output": items.output
+			
+			"action": {
+				"transact":{
+				"in": items.input,
+				"out": items.output
+			}
 			},
-			"transaction_hashed": items.transaction_hashed,
+			"hashed": items.transaction_hashed,
 			"signature": items.signed
 		};
 
@@ -36,7 +39,7 @@ var cyphernode = {
 		}
 	},
 	transaction_hashable_json: function (items, callback) {
-		var transaction = "{" + "input:" + items.input + ",output:" + items.output + "}";
+		var transaction = "{" + "in:" + items.input + ",out:" + items.output + "}";
 
 
 		if (typeof callback === 'function') {
@@ -44,7 +47,5 @@ var cyphernode = {
 		} else {
 			return transaction;
 		}
-
 	}
-
 };

@@ -5,7 +5,7 @@
 
 Let's kill passwords.
 
-Cypherpass is a public key authentication application and aiming to secure online interactions through public-key cryptography.  Cypherpass believes passwords are inherently insecure and that public-key cryptography is the final solution for authentication.
+Cypherpass is a public key authentication application aiming to secure online interactions through public-key cryptography.  Cypherpass believes passwords are inherently insecure and that public-key cryptography is the final solution for authentication.
 
 Cypherpass's Chrome browser extension can be found in the [Chrome Web Store](https://chrome.google.com/webstore/detail/cypherpass/mafcgnpkgiapmmbjcfffhognhcedfpng) and is publicly available for free download.
 
@@ -14,15 +14,15 @@ Cypherpass's Chrome browser extension can be found in the [Chrome Web Store](htt
  * Better than TLS, OpenSSL, or other $secure_solution.
 
 ### What Cypherpass **IS**
- * Better than blinding trusting websites with password security.
- * Better than security unconcerned users reusing passwords.
+ * Better than blindly trusting websites with password security.
+ * Better than non-security oriented users reusing passwords.
 
 ### How does Cypherpass work?
 * Cypherpass initially generates a public/private keypair and saves it to
   Google's cloud storage syncing all instances.
 * Cypherpass autofills form inputs either with a name `public_key` or an attribute `data-public_key`.  This input can be visible or hidden.
 * Just like passwords, supporting websites associate a user's public key with their login.
-* When authenticating a website provides a unique token.
+* When authenticating, a website provides a unique token.
 * Cypherpass cryptographically signs the token.
 * The website verifies the cryptographic signature thereby authenticating the user.
 

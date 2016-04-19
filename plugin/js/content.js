@@ -13,7 +13,7 @@
 
 
 //Default crypto
-var curve = "secp256k1";
+var curve = "P-256";
 var sigalg = "SHA256withECDSA";
 
 //Autofill values

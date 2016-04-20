@@ -219,18 +219,20 @@ function verifyKeyPair(items) {
 
 
 function hash(token) {
-	// double hash the private key.
+	// double hash
 	var hasher = new KJUR.crypto.MessageDigest({alg: "sha256", prov: "cryptojs"});
 	//first round
-	hasher.updateString(token);
-	hashed = hasher.digest();
-	console.log("Round1:" + hashed)
+	roundOne = hasher.digestString(token);
 	//second round
-	hasher.updateString(hashed);
-	
-	hashed = hasher.digest();
-	console.log("Round2:" + hashed)
+	//We want to hash the binary representation.
+	//Previous result is given as hex.
+	//THERE IS A HUGE BUG WITH THIS.  It is not giving proper results.  
+	roundTwo = hasher.digestHex(roundOne)
 
-	return hashed;
+	console.log("Token to be hashed:" + token)
+	console.log("Round1:" + roundOne)
+	console.log("Round2:" + roundTwo)
+
+	return roundTwo;
 }
 

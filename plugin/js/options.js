@@ -253,8 +253,8 @@ function key_ledger_verify() {
 		items.input = items.publicKey;
 		items.output = items.publicKey;
 
-		var trans = cyphernode.transaction_hashable_json(items);
-		console.log("Transaction portion to be hashed: " + trans);
+		var trans = cyphernode.action_hashable_json(items);
+		console.log("Actionto be hashed: " + trans);
 		items.message = hash(trans);
 		console.log("Transaction hashed: " + items.message);
 

@@ -224,9 +224,12 @@ function hash(token) {
 	//first round
 	hasher.updateString(token);
 	hashed = hasher.digest();
+	console.log("Round1:" + hashed)
 	//second round
 	hasher.updateString(hashed);
+	
 	hashed = hasher.digest();
+	console.log("Round2:" + hashed)
 
 	return hashed;
 }

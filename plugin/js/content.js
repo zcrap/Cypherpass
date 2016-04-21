@@ -217,21 +217,17 @@ function verifyKeyPair(items) {
 	return signMessage(items, verifyMessage);
 }
 
-
+//double hash
+//return as hex
 function hash(token) {
-	// double hash
 	var hasher = new KJUR.crypto.MessageDigest({alg: "sha256", prov: "cryptojs"});
 	//first round
 	roundOne = hasher.digestString(token);
-	//second round
-	//We want to hash the binary representation.
-	//Previous result is given as hex.
-	//THERE IS A HUGE BUG WITH THIS.  It is not giving proper results.  
-	roundTwo = hasher.digestHex(roundOne)
 
-	console.log("Token to be hashed:" + token)
-	console.log("Round1:" + roundOne)
-	console.log("Round2:" + roundTwo)
+	//second round
+	var hasher2 = new KJUR.crypto.MessageDigest({alg: "sha256", prov: "cryptojs"});
+	//roundOne result is given as hex.
+	roundTwo = hasher2.digestHex(roundOne)
 
 	return roundTwo;
 }

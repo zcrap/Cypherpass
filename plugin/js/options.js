@@ -78,7 +78,6 @@ function save_options() {
 	items.keyLedgerVerified = $("#keyLedgerVerified").attr("value");
 
 	update_status('Saving....');
-	console.log("Saving items.keyLedgerUrl: " + items.keyLedgerUrl);
 
 	//save options using save settings in storage.js
 	storage.save_settings(items, update_status('Settings Saved'));
@@ -244,7 +243,6 @@ function import_key_pair() {
 
 
 function key_ledger_verify() {
-	console.log("Starting key_ledger_verify");
 	var transaction = {};
 	cyphernode.generate_transaction_json(transaction);
 
@@ -254,16 +252,12 @@ function key_ledger_verify() {
 		items.output = items.publicKey;
 
 		var trans = cyphernode.action_hashable_json(items);
-		console.log("Actionto be hashed: " + trans);
 		items.message = hash(trans);
-		console.log("Transaction hashed: " + items.message);
-
 		items.transaction_hashed = items.message;
 
 
 
 		signMessage(items, function (items) {
-			console.log("signed transaction..." + items.signed);
 			var json = cyphernode.generate_transaction_json(items);
 			console.log("Json to send to server: " + json);
 
@@ -272,8 +266,9 @@ function key_ledger_verify() {
 				console.log(data);
 				if (data.key_verified) {
 					if (data.key_verified === "true" || data.key_verified === items.publicKey)
-						console.log("Key verified");
-					setKeyLedgerVerified("Ledger last verified: " + Date(), true, true)
+						setKeyLedgerVerified("Ledger last verified: " + Date(), true, true)
+				} else {
+					setKeyLedgerVerified("Key not verified..", false, true)
 				}
 
 			}, "json").fail(function (data) {

@@ -129,41 +129,32 @@ function option_verify_signature() {
 	//allow the first feild to have json object input with all components
 	try {
 		json = JSON.parse(items.publicKey);
+
+		if (json.public_key) {
+			items.publicKey = json.public_key;
+		}
+
+		if (json.message) {
+			items.message = json.message;
+		}
+
+		//Support "challenge" terminology as well as alias for message.
+		//Message to overwrite if exists.
+		if (json.challenge) {
+			items.message = json.challenge;
+		}
+
+		if (json.signed) {
+			items.signed = json.signed;
+		}
 	} catch (e) {
 		//It's not json.
 	}
 
-	if (json.public_key) {
-		items.publicKey = json.public_key;
-	}
-
-	//Support "challenge" terminology as well.
-	//Message to overwrite if exists.
-	if (json.challenge) {
-		items.message = json.challenge;
-	}
-
-	if (json.message) {
-		items.message = json.message;
-	}
-
-	if (json.signed) {
-		items.signed = json.signed;
-	}
-
-	//check to see if it was all dumped into pubkey.
-	//TODO figure out good way to handle message escaping.
-	var parts = items.publicKey.split("|");
-	if (parts.length === 3) {
-		items.publicKey = parts[0];
-		items.signed = parts[1];
-		items.message = parts[2];
-	}
-
+	//Set the verification message
 	var verifiedMessage = "";
 	var divStyle = document.getElementById('verifyMessageVerified')
 			.parentElement.parentElement.style;
-
 	//Set background color to failed.
 	divStyle.backgroundColor = "#ffcccc";
 

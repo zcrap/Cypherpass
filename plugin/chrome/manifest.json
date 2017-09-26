@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+	"name": "Cypherpass",
+	"description": "Public key authenticator.",
+	"version": "0.1.0.4",
+	"short_name": "Cypherpass",
+	"content_scripts": [
+		{
+			"matches": [
+				"<all_urls>"
+			],
+			"js": [
+				"vendor/jsrsasign.js",
+				"vendor/jquery.min.js",
+				"js/storage.js",
+				"js/content.js"
+			]
+		}
+	],
+	"permissions": [
+		"storage"
+	],
+	"options_ui": {
+		"page": "src/options.html",
+		"chrome_style": true
+	},
+	"icons": {
+		"128": "img/cypher_128.png"
+	}
+}

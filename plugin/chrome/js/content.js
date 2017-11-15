@@ -231,4 +231,3 @@ function hash(token) {
 
 	return roundTwo;
 }
-

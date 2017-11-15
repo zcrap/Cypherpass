@@ -1,4 +1,4 @@
-//run only on the options page.
+// run only on the options page.
 if (document.title === "Cypherpass Options") {
 	option_page();
 }
@@ -6,20 +6,18 @@ if (document.title === "Cypherpass Options") {
 
 function initialize() {
 	//Run the main start.
-	//This will initilize any empt options.
+	//This will initilize any empty options.
 	//Then restore the otions page.
 	start(restore_options);
-
 }
 
-//Update the options page GUI to show the latest saved information
+// Update the options page GUI to show the latest saved information
 function refresh_gui(callback) {
 	restore_options(null, callback);
 }
 
 function restore_options(items, callback) {
-
-	//Get saved options first, then set GUI.
+	// Get saved options first, then set GUI.
 	items = storage.get_saved(function (items) {
 		//Console log items here to see saved settings to console.
 		document.getElementById('autofill').checked = items.autofill;
@@ -105,7 +103,7 @@ function set_blank_status() {
 }
 
 
-//Sign a message manually in the options page.
+// Sign a message manually in the options page.
 function sign_message() {
 	storage.get_saved(function (items) {
 		update_status("Signing...");
@@ -119,7 +117,51 @@ function sign_message() {
 	});
 }
 
-//Verify signatures in the options page
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Verify the message we just signed (self verify)
+function sign_message_self_verify() {
+
+
+document.getElementById('publicKey').textContent
+
+
+	storage.get_saved(function (items) {
+		update_status("Signing...");
+		items.message = document.getElementById('messageToSign').value;
+
+		signMessage(items, function (items) {
+			json = {"public_key": items.publicKey, "message": items.message, "signed": items.signed};
+			json = JSON.stringify(json);
+			document.getElementById('signature').textContent = json
+		});
+	});
+}
+
+
+/////////////////////////////
+// Verify signatures in the options page
+////////////////////////////
 function option_verify_signature() {
 	var items = {};
 	items.publicKey = document.getElementById('verifyMessagePublicKey').value;
@@ -418,7 +460,3 @@ function option_page() {
 	document.getElementById('optionsPage').addEventListener('click', options_page);
 
 }
-
-
-
-

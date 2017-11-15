@@ -96,6 +96,9 @@
 
 			</div>
 
+
+
+
 			<div>
 				<p>Sign Message</p>
 				<div class="pair">
@@ -107,18 +110,36 @@
 					</div>
 				</div>
 
+<!-- Message Signature block -->
 				<div class="pair">
 					<div class="key">
-						<button id="selectSigned">
-							Copy Signature
-						</button>
+						Signature Block
 					</div>
 					<div class="value">
-						<span id="signature" title="We've formatting the signature as 'Public Key | Signature | Message' so that third parties have everything they need to verify your signature. ">
+						<span id="signature" title="The signature block is a json message with the public key, message, and signature. ">
 							&nbsp
 						</span>
 					</div>
 				</div>
+
+
+<!-- Copy Signature Button -->
+				<div class="pair">
+					<div class="key">
+						<button id="selectSigned">
+							Copy Signature Block
+						</button>
+					</div>
+				</div>
+<!-- Self Verify Signature Button -->
+				<div class="pair">
+					<div class="key">
+						<button id="selfVerifyMessage">
+							Verify Message
+						</button>
+					</div>
+				</div>
+
 
 			</div>
 

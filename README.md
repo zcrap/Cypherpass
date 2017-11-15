@@ -1,4 +1,4 @@
-![Cypherpass](/plugin/img/cypher_128.png)
+![Cypherpass](/img/cypher_128.png)
 
 # Cypherpass #
 #### Public Key Authenticator ####

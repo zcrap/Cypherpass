@@ -15,52 +15,61 @@
 		<h1>Cypherpass Options</h1>
 
 		<p>
-			<label>
-				<input type="checkbox" id="autofill" />
-				Auto fill forms with public key
-			</label>
-		</p>
-		<p>Auto Login</p>
-		<p>
-			<label>
-				<input type="checkbox" id="autologinFill" />
-				Auto fill login when available.
-			</label>
-
-		</p>
-		<p>
-			<label>
-				<input type="checkbox" id="autologinSubmit" />
-				Auto submit filled login.
-			</label>
+			<button class="optionsPage">Open options page in a new tab</button>
 		</p>
 
 
-
-
-
+<!-- Options -->
 		<div class="tools container">
-			<p>Tools</p>
+			<p>Options</p>
 
+<!-- Autologin -->
 			<div>
-				<p>Public key</p>
-				<div class="pair">
-					<div class="key">
-						<button id="selectPublicKey">Copy Public Key</button>
-					</div>
-					<div class="value">
-						<span id="publicKey"
-							  title="Your public key is what identifies you
-							  to third parties"></span>
-					</div>
-				</div>
-			</div>
+				<p>Autologin</p>
+				<p class="disabled">
+					<label>
+						<input type="checkbox" id="autologin" disabled/>
+						Autologin
+					</label>
+				</p>
 
-			<div>
-				<p>Key Ledger</p>
+			<div class="sub">
+				<p>
+					<label>
+						<input type="checkbox" id="autologinFill" />
+						Auto fill login when available.
+					</label>
+				</p>
+				<p>
+					<label>
+						<input type="checkbox" id="autofill" />
+						Auto fill forms with public key
+					</label>
+				</p>
 
 				<p>
+					<label>
+						<input type="checkbox" id="autologinSubmit" />
+						Auto submit filled login.
+					</label>
+				</p>
+			</div>
+			<p class="disabled">
+				<label>
+					<input type="checkbox" id="autologinWhitelist" disabled/>
+					Use autologin whitelist
+				</label>
+			</p>
+		</div>
 
+
+
+
+
+<!-- Key Ledger -->
+			<div>
+				<p>Key Ledger</p>
+				<p>
 					<input type="checkbox" id="enableKeyLedger">
 					Enable Key Ledger
 				</p>
@@ -87,14 +96,37 @@
 					</div>
 				</div>
 
-				<div class="pair">
-					<div class="key">
-					</div>
-					<div class="value">
-					</div>
-				</div>
+				<p class="disabled">
+					<label>
+						<input type="checkbox" id="autologinWhitelist" disabled/>
+						Use a new keypair every login
+					</label>
+				</p>
 
 			</div>
+		</div>
+
+
+
+<!-- Tools -->
+		<div class="tools container">
+			<p>Tools</p>
+
+			<div>
+				<p>Public key</p>
+				<div class="pair">
+					<div class="key">
+						<button id="selectPublicKey">Copy Public Key</button>
+					</div>
+					<div class="value">
+						<span id="publicKey"
+							  title="Your public key is what identifies you
+							  to third parties"></span>
+					</div>
+				</div>
+			</div>
+
+
 
 
 
@@ -270,7 +302,7 @@
 		</div>
 
 		<p>
-			<button id="optionsPage">Open options page in a new tab</button>
+			<button class="optionsPage">Open options page in a new tab</button>
 		</p>
 
 		<p>

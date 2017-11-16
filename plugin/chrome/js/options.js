@@ -457,6 +457,12 @@ function option_page() {
 	document.getElementById('testPage').addEventListener('click', test_page);
 
 	//Options page new tab
-	document.getElementById('optionsPage').addEventListener('click', options_page);
+	//document.getElementsByClassName('optionsPage').click(options_page);
+
+
+	//Options page new tab
+	$(".optionsPage").click(function() {
+		options_page();
+	});
 
 }

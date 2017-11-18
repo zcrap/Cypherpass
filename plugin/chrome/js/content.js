@@ -117,12 +117,59 @@ function newKeyPair(items, callback) {
 function generateKeys(items, callback) {
   var ec = new KEYUTIL.generateKeypair("EC", curve);
 
-  var jwkPrv = KEYUTIL.getJWKFromKey(ec.prvKeyObj);
   var jwkPub = KEYUTIL.getJWKFromKey(ec.pubKeyObj);
+  var jwkPrv = KEYUTIL.getJWKFromKey(ec.prvKeyObj);
+
+	// {
+	//   kty: "EC",
+	//   crv: "P-256",
+	//   x: "H1ZyjhXu7DzQNzbaV0_jYPKVdP_IjEIney9ifU_4Iek",
+	//   y: "FIw3q4CG0igWxFmhCmWlyXA9ulsDsv6a3LbOfQS8jjU"
+	// }
+
+  // rfc 7517 4.2 plus 4.3.
+  // 4.3 says, "SHOULD NOT" use 4.2 with 4.3 (but if so, used consistenly),
+  // but we never want to
+  // allow signing keys to be used for encryption due to security concerns.
+  // We don't see the harm in saying it both ways to make sure they are never
+  // used for encyrption.
+  // 4.2 also only mentions public keys.  Since the private should never
+  // be transmitted, having a local record of the use is not a bad idea.
+  jwkPub.use = "sig";
+	jwkPub.key_ops = ["sign", "verify"];
+  jwkPrv.use = "sig";
+  jwkPrv.key_ops = ["sign", "verify"];
 
   console.log(jwkPub);
 
-	// TODO stopped here
+
+
+  //Test sign
+
+  var sJWS = KJUR.jws.JWS.sign(null, {
+    alg: "ES256"
+  }, {
+    age: 21
+  }, jwkPrv);
+
+	// TODO probably intepreted as a string ^^^^
+  console.log(sJWS);
+
+	var verify = KJUR.jws.JWS.verify(sJWS, jwkPub, "ES256");
+
+	console.log(verify);
+
+  // TODO stopped here
+
+
+//Old
+	var ec = new KJUR.crypto.ECDSA({"curve": curve});
+var keypair = ec.generateKeyPairHex();
+
+
+	//Store key pair to items.
+ items.privateKey = keypair.ecprvhex;
+ items.publicKey = keypair.ecpubhex;
 
   var ec = new KJUR.crypto.ECDSA({
     "curve": curve

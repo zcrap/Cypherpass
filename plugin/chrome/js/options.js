@@ -1,17 +1,19 @@
+// options.js is the javascript specifically for the options page.
+
+// Main start.  
 // run only on the options page.
 if (document.title === "Cypherpass Options") {
   option_page();
 }
 
 
+// initialize initilizes any empty options and
+// then restores option page with saved settings.
 function initialize() {
-  //Run the main start.
-  //This will initilize any empty options.
-  //Then restore the otions page.
   start(restore_options);
 }
 
-// Update the options page GUI to show the latest saved information
+// refresh_gui updates the options page GUI to show the latest saved information
 function refresh_gui(callback) {
   restore_options(null, callback);
 }

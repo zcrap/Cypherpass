@@ -1,37 +1,26 @@
+// content.js hold general purpose code for the plugin.
+// Page specific code should go in its own file.
+
+
 ///////////////////
 //Default Settings
 ///////////////////
+// Defaults enumerates string values for default settings.
+var defaults = {
+  // Default crypto
+  "curve": "P-256",
+  "sigalg": "SHA256withECDSA",
+  // Autofill values
+  "autologFormName": "public_key_auth",
+  "autologFeildName": "public_key",
+  "sigFeildName": "signature",
+  "challengeAttr": "data-public_key_challenge"
+}
 
-//Values for Variable object
-//
-//publicKey
-//privateKey
-//message
-//signed
-//autologin
-//autofill
-
-
-// Default crypto
-var curve = "P-256";
-var sigalg = "SHA256withECDSA";
-
-// Autofill values
-var autofillFeildName = 'public_key';
-
-// Auto login values
-var autoLoginFormName = "public_key_auth";
-var formChallengeAttr = "data-public_key_challenge";
-var signatureInputFeild = "signature";
-
-// Custom HTML 5 types
-// These types should be true or false
-//var publicKeySupport = "data-public_key_auth";
-
-//New autologin stuffs
-var autoLoginInputIdentifier = "data-public_key_auth_challenge";
 
 // Storage
+// See cpd.prototype.presets in storage.js for save settings type,
+// named "items" here.
 var storage = new cpd()
 
 
@@ -115,17 +104,29 @@ function newKeyPair(items, callback) {
 
 // Generate new key pair.
 function generateKeys(items, callback) {
-  var ec = new KEYUTIL.generateKeypair("EC", curve);
+  var ec = new KEYUTIL.generateKeypair("EC", defaults.curve);
 
   var jwkPub = KEYUTIL.getJWKFromKey(ec.pubKeyObj);
   var jwkPrv = KEYUTIL.getJWKFromKey(ec.prvKeyObj);
 
-	// {
-	//   kty: "EC",
-	//   crv: "P-256",
-	//   x: "H1ZyjhXu7DzQNzbaV0_jYPKVdP_IjEIney9ifU_4Iek",
-	//   y: "FIw3q4CG0igWxFmhCmWlyXA9ulsDsv6a3LbOfQS8jjU"
-	// }
+  // Example valid JWK provided at this point.
+  //
+  // Public key:
+  // {
+  //   kty: "EC",
+  //   crv: "P-256",
+  //   x: "FYvutYH9DccAzN88vUzLop7l-zsM2uIN2kn7B_LLU_w",
+  //   y: "bFL4_eqkqPnzh9BkZ7muEGk5ydQyMIRPhOWAIc6lijc",
+  // }
+  //
+  // Private key:
+  // {
+  //   kty: "EC",
+  //   crv: "P-256",
+  //   x: "FYvutYH9DccAzN88vUzLop7l-zsM2uIN2kn7B_LLU_w",
+  //   y: "bFL4_eqkqPnzh9BkZ7muEGk5ydQyMIRPhOWAIc6lijc",
+  //   d: "fqr3fxw1oIEHm5eSxUq98Vk8_OpThHPHKeVALb3SxLs"
+  // }
 
   // rfc 7517 4.2 plus 4.3.
   // 4.3 says, "SHOULD NOT" use 4.2 with 4.3 (but if so, used consistenly),
@@ -136,11 +137,15 @@ function generateKeys(items, callback) {
   // 4.2 also only mentions public keys.  Since the private should never
   // be transmitted, having a local record of the use is not a bad idea.
   jwkPub.use = "sig";
-	jwkPub.key_ops = ["sign", "verify"];
+  jwkPub.key_ops = ["sign", "verify"];
   jwkPrv.use = "sig";
   jwkPrv.key_ops = ["sign", "verify"];
-
   console.log(jwkPub);
+  console.log(jwkPrv);
+
+  var prvKeyObj = KEYUTIL.getKey(jwkPrv);
+  var pubKeyObj = KEYUTIL.getKey(jwkPub);
+  console.log(prvKeyObj);
 
 
 
@@ -150,29 +155,37 @@ function generateKeys(items, callback) {
     alg: "ES256"
   }, {
     age: 21
-  }, jwkPrv);
+  }, prvKeyObj);
 
-	// TODO probably intepreted as a string ^^^^
+
   console.log(sJWS);
+  var isValid = KJUR.jws.JWS.verify(sJWS, pubKeyObj);
+  console.log(isValid);
 
-	var verify = KJUR.jws.JWS.verify(sJWS, jwkPub, "ES256");
+  var verify = KJUR.jws.JWS.verify(sJWS, jwkPub, "ES256");
 
-	console.log(verify);
+  console.log(verify);
+
+
+
+
 
   // TODO stopped here
 
 
-//Old
-	var ec = new KJUR.crypto.ECDSA({"curve": curve});
-var keypair = ec.generateKeyPairHex();
+  //Old
+  var ec = new KJUR.crypto.ECDSA({
+    "curve": defaults.curve
+  });
+  var keypair = ec.generateKeyPairHex();
 
 
-	//Store key pair to items.
- items.privateKey = keypair.ecprvhex;
- items.publicKey = keypair.ecpubhex;
+  //Store key pair to items.
+  items.privateKey = keypair.ecprvhex;
+  items.publicKey = keypair.ecpubhex;
 
   var ec = new KJUR.crypto.ECDSA({
-    "curve": curve
+    "curve": defaults.curve
   });
   var keypair = ec.generateKeyPairHex();
 
@@ -203,7 +216,7 @@ function autoFill(items) {
     return false;
   }
 
-  var inputs = document.getElementsByName(autofillFeildName);
+  var inputs = document.getElementsByName(defaults.autologFeildName);
   if (inputs.length === 0) {
     return false;
   } else {
@@ -220,12 +233,12 @@ function autoLogin(items) {
     return false;
   }
 
-  ////Find input with data-public_key_auth_challenge
-  //If exists, complete challenge and send it back.
-  var input = $("input[" + autoLoginInputIdentifier + "]");
+  // Find input with data-public_key_auth_challenge
+  // If exists, complete challenge and send it back.
+  var input = $("input[" + defaults.challengeAttr + "]");
   if (input) {
     //Get challenge value
-    items.message = input.attr(autoLoginInputIdentifier);
+    items.message = input.attr(defaults.challengeAttr);
     if (items.message) {
       console.log("Found public key authentication challenge: " + items.message);
       items = signMessage(items, function(items) {
@@ -245,7 +258,7 @@ function signMessage(items, callback) {
 
   try {
     var sig = new KJUR.crypto.Signature({
-      "alg": sigalg
+      "alg": defaults.sigalg
     });
   } catch (e) {
     update_status(e);
@@ -253,7 +266,7 @@ function signMessage(items, callback) {
 
   sig.initSign({
     'ecprvhex': items.privateKey,
-    'eccurvename': curve
+    'eccurvename': defaults.curve
   });
   sig.updateString(items.message);
   var sigValueHex = sig.sign();
@@ -271,19 +284,19 @@ function signMessage(items, callback) {
 //Returns boolean
 function verifyMessage(items) {
   var sig = new KJUR.crypto.Signature({
-    "alg": sigalg,
+    "alg": defaults.sigalg,
     "prov": "cryptojs/jsrsa"
   });
   sig.initVerifyByPublicKey({
     'ecpubhex': items.publicKey,
-    'eccurvename': curve
+    'eccurvename': defaults.curve
   });
   sig.updateString(items.message);
   return sig.verify(items.signed);
 }
 
-//Verify keypair by attempting to sign message and verifying it.
-//Returns boolean value.
+//  Verify keypair by attempting to sign message and verifying it.
+//  Returns boolean value.
 function verifyKeyPair(items) {
   if (!items.message) {
     items.message = Math.random();

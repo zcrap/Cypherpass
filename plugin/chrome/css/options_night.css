@@ -1,0 +1,12 @@
+/*
+  Night mode
+*/
+
+body {
+	background-color:#3b3b3b;
+	color:#ffffff;
+}
+
+.container > div{
+		background-color:#3b3b3b;
+}

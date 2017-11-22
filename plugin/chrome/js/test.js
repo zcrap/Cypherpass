@@ -1,3 +1,6 @@
+// test.js holds code for the test page.  
+
+
 document.addEventListener('DOMContentLoaded', test_page);
 
 

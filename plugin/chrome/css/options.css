@@ -1,6 +1,7 @@
 * {
 	word-wrap:break-word;
 	font-family: sans-serif;
+
 }
 
 body {
@@ -72,7 +73,7 @@ input[type="text"] {
 }
 
 .container > div{
-	background-color:white;
+	background-color:#ffffff;
 	margin:2px;
 	padding:5px;
 }

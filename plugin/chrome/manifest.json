@@ -13,7 +13,8 @@
 				"vendor/jsrsasign.js",
 				"vendor/jquery.min.js",
 				"js/storage.js",
-				"js/content.js"
+				"js/content.js",
+				"js/crypto.js"
 			]
 		}
 	],

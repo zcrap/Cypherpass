@@ -1,9 +1,10 @@
-// storage.js holds code for the storage page.
+// storage.js holds code for storage.
 
 // Crypto should always be stored locally.  No private key information
 // should ever be transmitted from a device.
 // See https://github.com/zamicol/cypherpass/wiki/Cypherpass-Principles-and-Philosophy
 
+// TODO dunno what this was for.  Firefox?
 var cpd = function() {
   this.type = "";
 
@@ -12,10 +13,12 @@ var cpd = function() {
   }
 };
 
+// Main storage datastructure.
+// We use this as our datastrucutre defintion of "items" used elsewhere in the
+// plugin to prevent code duplication.
 // presets is the array of settings
 // values will be the initial settings.
-// The name (key) is what will be used to save in storage AND the name
-// used in the items array.
+// The name (key) is what will be used to save in storage
 cpd.prototype.presets = {
   privateKey: false,
   publicKey: false,

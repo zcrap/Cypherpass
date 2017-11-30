@@ -1,6 +1,6 @@
 // options.js is the javascript specifically for the options page.
 
-// Main start.  
+// Main start.
 // run only on the options page.
 if (document.title === "Cypherpass Options") {
   option_page();
@@ -68,13 +68,13 @@ function restore_options(items, callback) {
 function save_options() {
   var items = {};
   //Cypherpass behavior.
-  items.autofill = document.getElementById('autofill').checked;
+  items.autofill = $('#autofill').is(':checked');
   items.autologinFill = $('#autologinFill').is(':checked');
   items.autologinSubmit = $('#autologinSubmit').is(':checked');
 
   //Key Ledger
-  items.enableKeyLedger = document.getElementById('enableKeyLedger').checked;
-  items.keyLedgerUrl = document.getElementById('keyLedgerUrl').value;
+  items.enableKeyLedger = $('#enableKeyLedger').is(':checked');
+  items.keyLedgerUrl = $("#keyLedgerUrl").attr("value")
   items.keyLedgerVerified = $("#keyLedgerVerified").attr("value");
 
   update_status('Saving....');

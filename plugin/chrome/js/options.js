@@ -26,7 +26,8 @@ function restore_options(items, callback) {
     $('#autologinFill').prop('checked', items.autologinFill);
     $('#autologinSubmit').prop('checked', items.autologinSubmit);
 
-    document.getElementById('publicKey').textContent = items.publicKey;
+    document.getElementById('publicKey').textContent = JSON.stringify(items.publicKey);
+
     //Key Ledger
     document.getElementById('enableKeyLedger').checked = items.enableKeyLedger;
     document.getElementById('keyLedgerUrl').value = items.keyLedgerUrl;
@@ -35,23 +36,42 @@ function restore_options(items, callback) {
     //$("#keyLedgerVerified").text();
 
 
-    //Reset if showing private key.
+    // Reset if showing private key.
     var pricon = document.getElementById('privateKey').textContent;
     if (pricon !== "" && pricon !== " ") {
-      document.getElementById('privateKey').textContent = items.privateKey;
+      document.getElementById('privateKey').textContent = JSON.stringify(items.privateKey);
     } else {
       document.getElementById('privateKey').textContent = "";
     }
 
-    //Reset signature
-    //Only sign if there is a value.
-    //Otherwise, ensure value is empty.
+    // Reset signature
+    // Only sign if there is a value.
+    // Otherwise, ensure value is empty.
     if (document.getElementById('messageToSign').value !== '') {
       //items.signed
       sign_message();
     } else {
       document.getElementById('signature').textContent = "";
     }
+
+    // Signature algorithm
+    // First add supported algs to select box
+    addSigAlg();
+    // Set selected to saved.  If not saved, set to default.
+    if (items.signatureAlgorithm == "") {
+      console.log("Signature Algorithm not set.  Setting to default.");
+      items.signatureAlgorithm = defaults.alg;
+      console.log(items.signatureAlgorithm);
+    } else {
+      //Make sure it is supported.
+      if (supportedSignatureAlgorithms.indexOf(items.signatureAlgorithm) === -1) {
+        console.error("algorithm not suported");
+        return;
+      }
+    }
+    $("#signatureAlgorithm").val(items.signatureAlgorithm);
+
+
 
     //callback or return
     if (typeof callback === 'function') {
@@ -66,6 +86,7 @@ function restore_options(items, callback) {
 
 
 function save_options() {
+  console.log("saving settings");
   var items = {};
   //Cypherpass behavior.
   items.autofill = $('#autofill').is(':checked');
@@ -76,11 +97,22 @@ function save_options() {
   items.enableKeyLedger = $('#enableKeyLedger').is(':checked');
   items.keyLedgerUrl = $("#keyLedgerUrl").attr("value")
   items.keyLedgerVerified = $("#keyLedgerVerified").attr("value");
+  items.signatureAlgorithm = $("#signatureAlgorithm").val();
 
   update_status('Saving....');
 
   //save options using save settings in storage.js
   storage.save_settings(items, update_status('Settings Saved'));
+}
+
+// addSigAlg adds supported sig algs to the signature algorithm selector.
+function addSigAlg() {
+  $.each(supportedSignatureAlgorithms, function(key, value) {
+    $('#signatureAlgorithm')
+      .append($("<option></option>")
+        .attr("value", value)
+        .text(value));
+  });
 }
 
 
@@ -106,19 +138,14 @@ function set_blank_status() {
 
 
 // Sign a message manually in the options page.
+// Updates signature block with JWT.
 function sign_message() {
   storage.get_saved(function(items) {
     update_status("Signing...");
     items.message = document.getElementById('messageToSign').value;
 
-    signMessage(items, function(items) {
-      json = {
-        "public_key": items.publicKey,
-        "message": items.message,
-        "signed": items.signed
-      };
-      json = JSON.stringify(json);
-      document.getElementById('signature').textContent = json
+    signMessage(items, function onSigned(items) {
+      document.getElementById('signature').textContent = items.signed;
     });
   });
 }
@@ -132,6 +159,7 @@ function sign_message() {
 
 
 // Verify the message we just signed (self verify)
+// TODO decapracate or rename.
 function sign_message_self_verify() {
 
 
@@ -223,10 +251,10 @@ function newKeyPairCheck() {
 }
 
 
-//Generate a new key pair.
+// Generate a new key pair.
 function newKeyPairOption() {
   newKeyPair(null, refresh_gui);
-  update_status('Saved new key pair');
+  update_status('Generated new key pair.');
 }
 
 
@@ -234,7 +262,7 @@ function newKeyPairOption() {
 function show_private_key() {
   update_status('Getting private key....');
   storage.get_saved(function(items) {
-    document.getElementById('privateKey').textContent = items.privateKey;
+    document.getElementById('privateKey').textContent = JSON.stringify(items.privateKey);
     document.getElementById('showPrivateKey').style.display = 'none';
     set_blank_status();
   });
@@ -246,7 +274,8 @@ function show_private_key_reset() {
   document.getElementById('showPrivateKey').style.display = 'initial';
 }
 
-//Manually import key pair.
+// Manually import key pair.
+// TODO should be able import solely based on a private key jwk.
 function import_key_pair() {
   update_status('importing key pair....');
 
@@ -396,8 +425,9 @@ function option_page() {
   document.addEventListener('DOMContentLoaded', initialize);
 
   ///////////
-  //Auto save
+  // Auto save
   ////////
+  // Any item that should trigger a save should be below
   document.getElementById('autofill').addEventListener("change", save_options);
 
   $('#autologinFill').change(save_options);
@@ -411,6 +441,10 @@ function option_page() {
     copy_text('publicKey');
   });
 
+  document.getElementById('signatureAlgorithm').addEventListener("change", save_options);
+
+
+
 
   //////////////
   //Key Ledger
@@ -419,9 +453,8 @@ function option_page() {
   $("#verifyKeyLedger").click(key_ledger_verify);
 
 
-
-  //Sign message
-  //Sign on update
+  // Sign message
+  // Sign on update
   document.getElementById('messageToSign').addEventListener("input", sign_message);
 
   //Select signed

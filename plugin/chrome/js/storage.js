@@ -20,8 +20,12 @@ var cpd = function() {
 // values will be the initial settings.
 // The name (key) is what will be used to save in storage
 cpd.prototype.presets = {
+  // Keys
   privateKey: false,
   publicKey: false,
+  // Crypto
+  signatureAlgorithm:false,
+  // Plugin Settings
   autofill: true,
   autologinFill: true,
   autologinSubmit: true,

@@ -1,6 +1,42 @@
 // crypto.js holds pure cryptographic functions.
 // No general plugin code should be in here.
 
+
+// Supported signature algorithms
+var supportedSignatureAlgorithms = [
+  "HS256",
+  "HS384",
+  "HS512",
+  "RS256",
+  "RS384",
+  "RS512",
+  "ES256",
+  "ES384",
+  "ES512",
+  "PS256",
+  "PS384",
+  "PS512",
+  "RSA1_5",
+  "RSA-OAEP",
+  "RSA-OAEP-256",
+  "A128KW",
+  "A192KW",
+  "A256KW",
+  "ECDH-ES",
+  "ECDH-ES+A128KW",
+  "ECDH-ES+A192KW",
+  "ECDH-ES+A256KW",
+  "A128GCMKW",
+  "A192GCMKW",
+  "A256GCMKW",
+  "PBES2-HS256+A128KW",
+  "PBES2-HS384+A192KW",
+  "PBES2-HS512+A256KW",
+  "EdDSA",
+  "RSA-OAEP-384",
+  "RSA-OAEP-512"
+];
+
 // newKeyPair generates a new jwk key pair and saves the settigns.
 function newKeyPair(items, callback) {
   //if items is empty, initialize
@@ -15,6 +51,9 @@ function newKeyPair(items, callback) {
   // Generate new keys and save them.
   return storage.save_settings(generateKeys(items), callback);
 }
+
+
+
 
 
 // Generate new jwk key pair.
@@ -84,7 +123,14 @@ function generateKeys(items, callback) {
 }
 
 
-//  signMessage signs with private key
+// signMessage signs with private key.
+// items.message should be message to sign.
+// items.privateKey should be key to sign with.
+// TODO items.alg is alg to sign with.
+//
+// Adds items.signed, which is the whole signed jwt, to items.
+//
+// Returns items.
 function signMessage(items, callback) {
   console.log("Starting signMessage")
 
@@ -99,6 +145,7 @@ function signMessage(items, callback) {
     //TODO should be an error?
     console.error("Error signing key.");
     update_status(e);
+    return
   }
   items.signed = sJWS;
 
@@ -119,8 +166,8 @@ function verifyMessage(items) {
   return isValid;
 }
 
-//  Verify keypair by attempting to sign message and verifying it.
-//  Returns boolean value.
+// Verify keypair by attempting to sign message and verifying it.
+// Returns boolean.
 // items.privateKey and items.publicKey must be correct.
 function verifyKeyPair(items) {
   if (!items.message || items.message == "") {
@@ -132,8 +179,8 @@ function verifyKeyPair(items) {
   return signMessage(items, verifyMessage);
 }
 
-//double hash
-//return as hex
+// double hash, Sha-256d
+// return as hex
 function hash(token) {
   var hasher = new KJUR.crypto.MessageDigest({
     alg: "sha256",

@@ -1,4 +1,5 @@
 // content.js holds general purpose code for the plugin.
+
 // This should be for functions that will execute during general plugin use.
 // Page specific code, such as the options or test page, should go in its own file.
 
@@ -93,10 +94,9 @@ function autoFill(items) {
   }
 }
 
-
+// autoLogin is the main function for auto login.
 function autoLogin(items) {
-
-  //If the user has disabled autologin in the settings don't run
+  // If the user has disabled autologin in the settings don't run
   if (!items.autologinFill === true) {
     return false;
   }

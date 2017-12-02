@@ -68,7 +68,7 @@
 				<p>Crypto</p>
 				<p >
 					<label>
-						Signature Algorithm 
+						Signature Algorithm
 							<select id="signatureAlgorithm">
 							</select>
 
@@ -157,10 +157,10 @@
 <!-- Message Signature block -->
 				<div class="pair">
 					<div class="key">
-						Signature Block
+						JWS (signed message)
 					</div>
 					<div class="value">
-						<span id="signature" title="The signature block is a json message with the public key, message, and signature. ">
+						<span id="signature" title="The JWS is the signature block.  It has a header with crypto settings details, the message payload, and the cryptographic signature. ">
 							&nbsp
 						</span>
 					</div>
@@ -171,7 +171,7 @@
 				<div class="pair">
 					<div class="key">
 						<button id="selectSigned">
-							Copy Signature Block
+							Copy JWS
 						</button>
 					</div>
 				</div>
@@ -194,7 +194,7 @@
 
 				<div class="pair">
 					<div class="key">
-						Public Key
+						JWK (public key)
 						<br />
 
 					</div>
@@ -205,21 +205,21 @@
 
 				<div class="pair">
 					<div class="key">
-						Message
+						JWS
 					</div>
 					<div class="value">
 						<input type="text" id="verifyMessageMessage" />
 					</div>
 				</div>
 
-				<div class="pair">
+				<!-- <div class="pair">
 					<div class="key">
 						Signature
 					</div>
 					<div class="value">
 						<input type="text" id="verifyMessageSignature" />
 					</div>
-				</div>
+				</div> -->
 
 
 
@@ -228,7 +228,7 @@
 
 				<div class="pair">
 					<div class="key">
-						Verified
+						Status
 					</div>
 					<div class="value">
 						<span id="verifyMessageVerified">&nbsp</span>

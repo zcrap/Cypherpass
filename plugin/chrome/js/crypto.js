@@ -3,39 +3,47 @@
 
 
 // Supported signature algorithms
+// Mainly due to kjur limitations.
+// We will add others when they are supported by the kjur library
+// or replacement.
+// See https://kjur.github.io/jsjws/api/symbols/KJUR.jws.JWS.html#.sign
+// for current supported list.
 var supportedSignatureAlgorithms = [
   "HS256",
-  "HS384",
   "HS512",
   "RS256",
   "RS384",
   "RS512",
   "ES256",
   "ES384",
-  "ES512",
   "PS256",
   "PS384",
-  "PS512",
-  "RSA1_5",
-  "RSA-OAEP",
-  "RSA-OAEP-256",
-  "A128KW",
-  "A192KW",
-  "A256KW",
-  "ECDH-ES",
-  "ECDH-ES+A128KW",
-  "ECDH-ES+A192KW",
-  "ECDH-ES+A256KW",
-  "A128GCMKW",
-  "A192GCMKW",
-  "A256GCMKW",
-  "PBES2-HS256+A128KW",
-  "PBES2-HS384+A192KW",
-  "PBES2-HS512+A256KW",
-  "EdDSA",
-  "RSA-OAEP-384",
-  "RSA-OAEP-512"
+  "PS512"
 ];
+
+// Intend to support in the future:
+//"HS384",
+// "ES512",
+// "RSA1_5",
+// "RSA-OAEP",
+// "RSA-OAEP-256",
+// "A128KW",
+// "A192KW",
+// "A256KW",
+// "ECDH-ES",
+// "ECDH-ES+A128KW",
+// "ECDH-ES+A192KW",
+// "ECDH-ES+A256KW",
+// "A128GCMKW",
+// "A192GCMKW",
+// "A256GCMKW",
+// "PBES2-HS256+A128KW",
+// "PBES2-HS384+A192KW",
+// "PBES2-HS512+A256KW",
+// "EdDSA",
+// "RSA-OAEP-384",
+// "RSA-OAEP-512"
+
 
 // newKeyPair generates a new jwk key pair and saves the settigns.
 function newKeyPair(items, callback) {
@@ -95,12 +103,6 @@ function generateKeys(items, callback) {
   jwkPrv.use = "sig";
   jwkPrv.key_ops = ["sign", "verify"];
 
-  // convert to kjur structure.
-  var pubKeyObj = KEYUTIL.getKey(jwkPub);
-  var prvKeyObj = KEYUTIL.getKey(jwkPrv);
-
-  console.log("Done with new.");
-
   // Store key pair to internal settings.
   items.publicKey = jwkPub;
   items.privateKey = jwkPrv;
@@ -124,26 +126,29 @@ function generateKeys(items, callback) {
 
 
 // signMessage signs with private key.
+// These three things must be set:
 // items.message should be message to sign.
 // items.privateKey should be key to sign with.
-// TODO items.alg is alg to sign with.
+// items.signatureAlgorithm is alg to sign with.
 //
-// Adds items.signed, which is the whole signed jwt, to items.
+// Adds items.signed, which is the whole signed jws, to items.
 //
 // Returns items.
 function signMessage(items, callback) {
-  console.log("Starting signMessage")
+  console.log("Starting signMessage");
+  console.log(items);
 
   var prvKeyObj = KEYUTIL.getKey(items.privateKey);
 
   // Test jws sign
   try {
     var sJWS = KJUR.jws.JWS.sign(null, {
-      alg: defaults.alg
+      alg: items.signatureAlgorithm
     }, items.message, prvKeyObj);
   } catch (e) {
     //TODO should be an error?
     console.error("Error signing key.");
+    console.error(e);
     update_status(e);
     return
   }
@@ -160,9 +165,18 @@ function signMessage(items, callback) {
 // verifyMessage verifies a signed message.
 // Returns boolean.
 function verifyMessage(items) {
-  var pubKeyObj = KEYUTIL.getKey(items.publicKey);
-  var isValid = KJUR.jws.JWS.verify(items.signed, pubKeyObj);
-  console.log(isValid);
+  try{
+    console.log(items);
+    var pubKeyObj = KEYUTIL.getKey(items.publicKey);
+    console.log("end verifyMessage");
+    var isValid = KJUR.jws.JWS.verify(items.signed, pubKeyObj);
+    console.log(isValid);
+    console.log("end verifyMessage");
+  }catch(e){
+    console.error(e);
+    return e
+  }
+
   return isValid;
 }
 

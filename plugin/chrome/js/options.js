@@ -162,10 +162,7 @@ function sign_message() {
 // TODO decapracate or rename.
 function sign_message_self_verify() {
 
-
   document.getElementById('publicKey').textContent
-
-
   storage.get_saved(function(items) {
     update_status("Signing...");
     items.message = document.getElementById('messageToSign').value;
@@ -189,33 +186,10 @@ function sign_message_self_verify() {
 function option_verify_signature() {
   var items = {};
   items.publicKey = document.getElementById('verifyMessagePublicKey').value;
-  items.signed = document.getElementById('verifyMessageSignature').value;
-  items.message = document.getElementById('verifyMessageMessage').value;
+  items.signed = document.getElementById('verifyMessageMessage').value;
+  // items.signed = document.getElementById('verifyMessageSignature').value;
 
-  //allow the first feild to have json object input with all components
-  try {
-    json = JSON.parse(items.publicKey);
 
-    if (json.public_key) {
-      items.publicKey = json.public_key;
-    }
-
-    if (json.message) {
-      items.message = json.message;
-    }
-
-    //Support "challenge" terminology as well as alias for message.
-    //Message to overwrite if exists.
-    if (json.challenge) {
-      items.message = json.challenge;
-    }
-
-    if (json.signed) {
-      items.signed = json.signed;
-    }
-  } catch (e) {
-    //It's not json.
-  }
 
   //Set the verification message
   var verifiedMessage = "";
@@ -268,14 +242,15 @@ function show_private_key() {
   });
 }
 
-//show the private key reset
+// Blank private key afte showing.
 function show_private_key_reset() {
   document.getElementById('privateKey').textContent = "";
   document.getElementById('showPrivateKey').style.display = 'initial';
 }
 
 // Manually import key pair.
-// TODO should be able import solely based on a private key jwk.
+// TODO should be able import solely based on a private key jwk since
+// it include public key components.
 function import_key_pair() {
   update_status('importing key pair....');
 
@@ -313,26 +288,26 @@ function key_ledger_verify() {
 
 
 
-    signMessage(items, function(items) {
-      var json = cyphernode.generate_transaction_json(items);
-      console.log("Json to send to server: " + json);
-
-      $.post(items.keyLedgerUrl, json, function(data) {
-        console.log("Post success");
-        console.log(data);
-        if (data.key_verified) {
-          if (data.key_verified === "true" || data.key_verified === items.publicKey)
-            setKeyLedgerVerified("Ledger last verified: " + Date(), true, true)
-        } else {
-          setKeyLedgerVerified("Key not verified..", false, true)
-        }
-
-      }, "json").fail(function(data) {
-        console.log("Post Failed.");
-        console.log(data);
-        setKeyLedgerVerified("Problem communicating with ledger.", false, true)
-      });
-    });
+    // signMessage(items, function(items) {
+    //   var json = cyphernode.generate_transaction_json(items);
+    //   console.log("Json to send to server: " + json);
+    //
+    //   $.post(items.keyLedgerUrl, json, function(data) {
+    //     console.log("Post success");
+    //     console.log(data);
+    //     if (data.key_verified) {
+    //       if (data.key_verified === "true" || data.key_verified === items.publicKey)
+    //         setKeyLedgerVerified("Ledger last verified: " + Date(), true, true)
+    //     } else {
+    //       setKeyLedgerVerified("Key not verified..", false, true)
+    //     }
+    //
+    //   }, "json").fail(function(data) {
+    //     console.log("Post Failed.");
+    //     console.log(data);
+    //     setKeyLedgerVerified("Problem communicating with ledger.", false, true)
+    //   });
+    // });
   });
 }
 
@@ -409,6 +384,18 @@ function options_page() {
   });
 }
 
+function selfVerify(){
+console.log("selfVerifyMessage");
+var sig = $("#signature").text();
+var pub = $("#publicKey").text();
+
+$("#verifyMessagePublicKey").val(pub);
+$("#verifyMessageMessage").val(sig);
+
+option_verify_signature();
+
+}
+
 
 
 
@@ -437,11 +424,12 @@ function option_page() {
   document.getElementById('keyLedgerUrl').addEventListener("input", save_options);
 
   //Select Public Key
-  document.getElementById('selectPublicKey').addEventListener("click", function() {
-    copy_text('publicKey');
-  });
+$('#selectPublicKey').click(function() {
+  copy_text('publicKey');
+});
 
-  document.getElementById('signatureAlgorithm').addEventListener("change", save_options);
+// Select signature algorithm
+  $('#signatureAlgorithm').change(save_options);
 
 
 
@@ -462,14 +450,19 @@ function option_page() {
     copy_text('signature');
   });
 
+  // Verify the message we just signed
+  $("#selfVerifyMessage").click(function() {
+    selfVerify();
+  });
+
   //Verify Signature
   //Verify on update
   document.getElementById('verifyMessageMessage')
     .addEventListener("input", option_verify_signature);
   document.getElementById('verifyMessagePublicKey')
     .addEventListener("input", option_verify_signature);
-  document.getElementById('verifyMessageSignature')
-    .addEventListener("input", option_verify_signature);
+  // document.getElementById('verifyMessageSignature')
+  //   .addEventListener("input", option_verify_signature);
 
   // New Keypair
   // Make sure the user knows what they are doing first.

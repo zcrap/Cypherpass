@@ -1,10 +1,10 @@
 // test.js holds code for the test page.  
 
 
-document.addEventListener('DOMContentLoaded', test_page);
+document.addEventListener('DOMContentLoaded', testPage);
 
 
-function test_page() {
+function testPage() {
 
 	//Add a sample test report to make sure it's working.
 	add_test_report({

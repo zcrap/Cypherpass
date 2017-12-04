@@ -8,6 +8,8 @@
 // Variables
 ///////////////////
 // Defaults enumerates string values for default settings.
+//
+// Defaults are declared in storage.js
 var defaults = {
   "alg": "ES256", // default alg. RFC7515, Section 4.1.1
   // Autofill values
@@ -17,8 +19,7 @@ var defaults = {
   "challengeAttr": "data-public_key_challenge",
 
   // Depracate me: Old Default crypto
-  "curve": "P-256",
-  "sigalg": "SHA256withECDSA"
+  //"sigalg": "SHA256withECDSA"
 }
 
 // Storage

@@ -3,7 +3,7 @@
 // Main start.
 // run only on the options page.
 if (document.title === "Cypherpass Options") {
-  option_page();
+  optionPageInit();
 }
 
 
@@ -63,10 +63,13 @@ function restore_options(items, callback) {
       items.signatureAlgorithm = defaults.alg;
       console.log(items.signatureAlgorithm);
     } else {
+      console.log(items.signatureAlgorithm);
       //Make sure it is supported.
       if (supportedSignatureAlgorithms.indexOf(items.signatureAlgorithm) === -1) {
-        console.error("algorithm not suported");
-        return;
+        console.error("algorithm not suported.  Setting to default and saving.  ");
+        items.signatureAlgorithm = defaults.alg;
+        save_options();
+
       }
     }
     $("#signatureAlgorithm").val(items.signatureAlgorithm);
@@ -143,6 +146,12 @@ function sign_message() {
   storage.get_saved(function(items) {
     update_status("Signing...");
     items.message = document.getElementById('messageToSign').value;
+console.log(items);
+    if (supportedSignatureAlgorithms.indexOf(items.signatureAlgorithm) === -1) {
+      console.error("algorithm not suported or not set. Setting to default.");
+      items.signatureAlgorithm = defaults.alg;
+
+    }
 
     signMessage(items, function onSigned(items) {
       document.getElementById('signature').textContent = items.signed;
@@ -213,7 +222,7 @@ function option_verify_signature() {
   document.getElementById('verifyMessageVerified').textContent = verifiedMessage;
 }
 
-
+// newKeyPairCheck
 // Checkbox to make sure the user wants to create a new keypair.
 // Creating a new keypair should be disabled until this is checked.
 function newKeyPairCheck() {
@@ -227,7 +236,10 @@ function newKeyPairCheck() {
 
 // Generate a new key pair.
 function newKeyPairOption() {
-  newKeyPair(null, refresh_gui);
+  var items = {};
+  items.signatureAlgorithm = $("#signatureAlgorithm").val();
+
+  newKeyPair(items, refresh_gui);
   update_status('Generated new key pair.');
 }
 
@@ -351,10 +363,10 @@ function setKeyLedgerVerified(s, status, save) {
 
 
 
-
-function copy_text(element) {
+// copyText is a helper function for copying HTML text based on ID
+function copyText(elementID) {
   //Before we copy, we are going to select the text.
-  var text = document.getElementById(element);
+  var text = document.getElementById(elementID);
   var selection = window.getSelection();
   var range = document.createRange();
   range.selectNodeContents(text);
@@ -370,44 +382,41 @@ function copy_text(element) {
 
 
 
-////Set button link to new test page tab
-function test_page() {
+// testPage opens a new tab with the test page.
+function testPage() {
   chrome.tabs.create({
     url: "/src/test.html"
   });
 }
 
-//Set button link to new options page tab
-function options_page() {
+// optionsPageTab opens a new tab with the options page.
+function optionsPageTab(){
   chrome.tabs.create({
     url: "/src/options.html"
   });
 }
 
-function selfVerify(){
-console.log("selfVerifyMessage");
-var sig = $("#signature").text();
-var pub = $("#publicKey").text();
+// selfVerify verifies a message in the tools sections.
+// This helps the user confirm that a message is verifiable.
+function selfVerify() {
+  console.log("selfVerifyMessage");
+  var sig = $("#signature").text();
+  var pub = $("#publicKey").text();
 
-$("#verifyMessagePublicKey").val(pub);
-$("#verifyMessageMessage").val(sig);
+  $("#verifyMessagePublicKey").val(pub);
+  $("#verifyMessageMessage").val(sig);
 
-option_verify_signature();
-
+  option_verify_signature();
 }
 
 
 
 
 
+// optionPageInit initializes the options page and restores settiongs
+// when document is loaded.
+function optionPageInit() {
 
-
-/////////////
-//Page Events
-/////////////
-
-function option_page() {
-  //Restore options when document is loaded.
   //TODO loaded should happen, then everything else.
   document.addEventListener('DOMContentLoaded', initialize);
 
@@ -425,7 +434,7 @@ function option_page() {
 
   //Select Public Key
 $('#selectPublicKey').click(function() {
-  copy_text('publicKey');
+  copyText('publicKey');
 });
 
 // Select signature algorithm
@@ -447,7 +456,7 @@ $('#selectPublicKey').click(function() {
 
   //Select signed
   document.getElementById('selectSigned').addEventListener("click", function() {
-    copy_text('signature');
+    copyText('signature');
   });
 
   // Verify the message we just signed
@@ -470,7 +479,6 @@ $('#selectPublicKey').click(function() {
   //Actually do new keypair.
   document.getElementById('newKeyPair').addEventListener('click', newKeyPairOption);
 
-  // TODO full jwk
   //Show the private key to the user
   document.getElementById('showPrivateKey').addEventListener("click", show_private_key);
 
@@ -478,15 +486,15 @@ $('#selectPublicKey').click(function() {
   document.getElementById('importKeyPairButton').addEventListener("click", import_key_pair);
 
   //Test page new tab
-  document.getElementById('testPage').addEventListener('click', test_page);
+  document.getElementById('testPage').addEventListener('click', testPage);
 
   //Options page new tab
-  //document.getElementsByClassName('optionsPage').click(options_page);
+  //document.getElementsByClassName('optionsPage').click(optionsPageTab);
 
 
   //Options page new tab
   $(".optionsPage").click(function() {
-    options_page();
+    optionsPageTab();
   });
 
 }

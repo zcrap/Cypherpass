@@ -1,27 +1,32 @@
 // crypto.js holds pure cryptographic functions.
 // No general plugin code should be in here.
+// TODO namespace this.
+
+// Defaults
+var cryptoDefaults = {
+  "alg": "ES256",
+  "curve": "P-256"
+};
 
 
-// Supported signature algorithms
+// Supported signature algorithms in JWA format.
 // Mainly due to kjur limitations.
 // We will add others when they are supported by the kjur library
 // or replacement.
 // See https://kjur.github.io/jsjws/api/symbols/KJUR.jws.JWS.html#.sign
 // for current supported list.
-var supportedSignatureAlgorithms = [
-  "HS256",
-  "HS512",
-  "RS256",
-  "RS384",
-  "RS512",
-  "ES256",
-  "ES384",
-  "PS256",
-  "PS384",
-  "PS512"
-];
-
-// Intend to support in the future:
+// TODO hmac
+// "HS256", // HMAC using SHA-256
+// "HS512", // HMAC using SHA-384
+// TODO RSA
+// "PS256", // RSASSA-PSS using SHA-256 and MGF1 with SHA-256
+// "PS384", // RSASSA-PSS using SHA-384 and MGF1 with SHA-384
+// "PS512" // 	RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+// "RS256", // RSASSA-PKCS1-v1_5 using SHA-256
+// "RS384", // RSASSA-PKCS1-v1_5 using SHA-384
+// "RS512", // RSASSA-PKCS1-v1_5 using SHA-512
+//
+// Intend to support in the future dependent on kjur:
 //"HS384",
 // "ES512",
 // "RSA1_5",
@@ -43,18 +48,52 @@ var supportedSignatureAlgorithms = [
 // "EdDSA",
 // "RSA-OAEP-384",
 // "RSA-OAEP-512"
+var supportedSignatureAlgorithms = [
+  "ES256", // ECDSA using P-256 and SHA-256
+  "ES384", // ECDSA using P-384 and SHA-384
+];
+
+// getKJURKEYUTILParams converts the JWA format to the KJUR format suitable for
+//
+// KEYUTIL.generateKeypair(alg, keylenOrCurve)
+//
+// Returns "parameters" datastructure in this form:
+// var parameters= {"alg" = "value", "keylenOrCurve" = "value"};
+function getKJURKEYUTILParams(JWKAlg) {
+  var parameters = {};
+
+  switch (JWKAlg) {
+    case "RS256":
+      parameters.alg = "EC";
+      parameters.keylenOrCurve = "secp256r1";
+      break;
+    case "ES384":
+      parameters.alg = "EC";
+      parameters.keylenOrCurve = "secp384r1";
+      break;
+    default:
+      parameters.alg = "EC";
+      parameters.keylenOrCurve = "secp256r1";
+  }
+
+  return parameters;
+}
+
+
 
 
 // newKeyPair generates a new jwk key pair and saves the settigns.
 function newKeyPair(items, callback) {
   //if items is empty, initialize
   if (!items) {
+    console.log("items not initialized")
     items = {};
   }
 
   // initilize and ensure blank keys.
   items.privateKey = "";
   items.publicKey = "";
+  items.signatureAlgorithm = cryptoDefaults.alg;
 
   // Generate new keys and save them.
   return storage.save_settings(generateKeys(items), callback);
@@ -66,7 +105,21 @@ function newKeyPair(items, callback) {
 
 // Generate new jwk key pair.
 function generateKeys(items, callback) {
-  var ec = new KEYUTIL.generateKeypair("EC", defaults.curve);
+  console.log("Starting generateKeys.  items:");
+console.log(items);
+
+
+  if (supportedSignatureAlgorithms.indexOf(items.signatureAlgorithm) === -1) {
+    console.log("algorithm not suported or not set.  ");
+    items.signatureAlgorithm = defaults.alg;
+  }
+
+  var keyParams = getKJURKEYUTILParams(items.signatureAlgorithm);
+  console.log("keyParams:");
+  console.log(keyParams);
+
+
+  var ec = new KEYUTIL.generateKeypair(keyParams.alg, keyParams.keylenOrCurve);
 
   var jwkPub = KEYUTIL.getJWKFromKey(ec.pubKeyObj);
   var jwkPrv = KEYUTIL.getJWKFromKey(ec.prvKeyObj);
@@ -91,9 +144,10 @@ function generateKeys(items, callback) {
   // }
 
   // rfc 7517 4.2, 4.3.
+  // 4.2. gives only two options, "sig" or  "enc".
   // 4.3 says, "SHOULD NOT" use 4.2 with 4.3 (but if so, used consistenly),
-  // but we never want to
-  // allow signing keys to be used for encryption due to security concerns.
+  // but we never want to allow signing keys to be used for encryption due to
+  // security concerns.
   // We don't see the harm in saying it both ways to make sure they are never
   // used for encryption.
   // 4.2 also only mentions public keys.  Since the private should never
@@ -139,6 +193,13 @@ function signMessage(items, callback) {
   console.log(items);
 
   var prvKeyObj = KEYUTIL.getKey(items.privateKey);
+  console.log("items.privateKey");
+  console.log(prvKeyObj);
+
+  if (supportedSignatureAlgorithms.indexOf(items.signatureAlgorithm) === -1) {
+    console.error("algorithm not suported or not set.  ");
+  }
+
 
   // Test jws sign
   try {
@@ -165,10 +226,13 @@ function signMessage(items, callback) {
 // verifyMessage verifies a signed message.
 // Returns boolean.
 function verifyMessage(items) {
+  console.log("start verifyMessage");
   try{
     console.log(items);
+    console.log("items.publicKey:");
+    console.log(items.publicKey);
     var pubKeyObj = KEYUTIL.getKey(items.publicKey);
-    console.log("end verifyMessage");
+    console.log("verifyMessage 1");
     var isValid = KJUR.jws.JWS.verify(items.signed, pubKeyObj);
     console.log(isValid);
     console.log("end verifyMessage");

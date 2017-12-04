@@ -19,6 +19,8 @@ var cpd = function() {
 // presets is the array of settings
 // values will be the initial settings.
 // The name (key) is what will be used to save in storage
+//
+// Default values are defined in **content.js**
 cpd.prototype.presets = {
   // Keys
   privateKey: false,

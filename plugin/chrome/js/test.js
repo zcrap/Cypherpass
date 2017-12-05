@@ -1,4 +1,4 @@
-// test.js holds code for the test page.  
+// test.js holds code for the test page.
 
 
 document.addEventListener('DOMContentLoaded', testPage);
@@ -13,7 +13,7 @@ function testPage() {
 		"message": "Test messsages go here."
 	});
 
-	//Get current saved settigns and run tests.
+	//Get current saved settings and run tests.
 	storage.get_saved(run_tests);
 }
 

@@ -50,8 +50,19 @@ input[type="text"] {
 }
 
 .value {
-	max-width:400px;
 	word-wrap: break-word;
+}
+
+.alert {
+	color:#000000;
+}
+
+.alert.danger{
+	background-color:#FF0000;
+}
+
+.alert.success{
+background-color:#ADFF2F;
 }
 
 .pair {

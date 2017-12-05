@@ -194,7 +194,7 @@ function sign_message_self_verify() {
 ////////////////////////////
 function option_verify_signature() {
   var items = {};
-  items.publicKey = document.getElementById('verifyMessagePublicKey').value;
+  items.publicKey = JSON.parse(document.getElementById('verifyMessagePublicKey').value);
   items.signed = document.getElementById('verifyMessageMessage').value;
   // items.signed = document.getElementById('verifyMessageSignature').value;
 
@@ -202,16 +202,15 @@ function option_verify_signature() {
 
   //Set the verification message
   var verifiedMessage = "";
-  var divStyle = document.getElementById('verifyMessageVerified')
-    .parentElement.parentElement.style;
+
   //Set background color to failed.
-  divStyle.backgroundColor = "#ffcccc";
+$( "#verifyMessageVerified" ).removeClass( "success" ).addClass( "danger" );
 
   //Attempt to verify
   try {
     if (verifyMessage(items) === true) {
       verifiedMessage = "Valid signature.";
-      divStyle.backgroundColor = "greenyellow";
+      $("#verifyMessageVerified").removeClass( "danger" ).addClass("success");
     } else {
       verifiedMessage = "Invalid signature.";
     }

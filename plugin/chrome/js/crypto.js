@@ -190,11 +190,7 @@ console.log(items);
 // Returns items.
 function signMessage(items, callback) {
   console.log("Starting signMessage");
-  console.log(items);
-
   var prvKeyObj = KEYUTIL.getKey(items.privateKey);
-  console.log("items.privateKey");
-  console.log(prvKeyObj);
 
   if (supportedSignatureAlgorithms.indexOf(items.signatureAlgorithm) === -1) {
     console.error("algorithm not suported or not set.  ");
@@ -227,10 +223,8 @@ function signMessage(items, callback) {
 // Returns boolean.
 function verifyMessage(items) {
   console.log("start verifyMessage");
+  console.log(items);
   try{
-    console.log(items);
-    console.log("items.publicKey:");
-    console.log(items.publicKey);
     var pubKeyObj = KEYUTIL.getKey(items.publicKey);
     console.log("verifyMessage 1");
     var isValid = KJUR.jws.JWS.verify(items.signed, pubKeyObj);

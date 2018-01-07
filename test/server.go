@@ -10,7 +10,8 @@ import (
 	"math/rand"
 	"net/http"
 	"strings"
-	cypher "test/cypherpass"
+
+	cypher "github.com/zamicol/cypherpass/test/cypherpass"
 )
 
 var (

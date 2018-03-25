@@ -1,40 +1,41 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<!-- options.js will only run if this title matches -->
-		<title>Cypherpass Options</title>
-		<link rel="stylesheet" type="text/css" href="/css/options.css"/>
-		<link rel="stylesheet" type="text/css" href="/css/options_night.css"/>
 
-		<!-- color tab color in android -->
-		<meta name="theme-color" content="#2b5aa0">
-
-	</head>
-
-	<body>
-		<div id="header" class="center">
-			<img src="/img/cypher_128.png" alt="cypherpass" style="width:128px;height:128px;">
-		</div>
-		<h1>Cypherpass Options</h1>
-
-		<p>
-			<button class="optionsPage">Open options page in a new tab</button>
-		</p>
+<head>
+	<!-- options.js will only run if this title matches -->
+	<title>Cypherpass Options</title>
+	<link rel="stylesheet" type="text/css" href="/css/options.css" />
 
 
-<!-- Options -->
-		<div class="tools container">
-			<p>Options</p>
+	<!-- color tab color in android -->
+	<meta name="theme-color" content="#2b5aa0">
 
-<!-- Autologin -->
-			<div>
-				<p>Autologin</p>
-				<p class="disabled">
-					<label>
+</head>
+
+<body>
+	<div id="header" class="center">
+		<img src="/img/cypher_128.png" alt="cypherpass" style="width:128px;height:128px;">
+	</div>
+	<h1>Cypherpass Options</h1>
+
+	<p>
+		<button class="optionsPage">Open options page in a new tab</button>
+	</p>
+
+
+	<!-- Options -->
+	<div class="tools container">
+		<p>Options</p>
+
+		<!-- Autologin -->
+		<div>
+			<p>Autologin</p>
+			<p class="disabled">
+				<label>
 						<input type="checkbox" id="autologin" disabled/>
 						Autologin
 					</label>
-				</p>
+			</p>
 
 			<div class="sub">
 				<p>
@@ -65,64 +66,78 @@
 			</p>
 		</div>
 
-<!-- Crypto -->
-			<div>
-				<p>Crypto</p>
-				<p >
-					<label>
+		<!-- Crypto -->
+		<div>
+			<p>Crypto</p>
+			<p>
+				<label>
 						Signature Algorithm
 							<select id="signatureAlgorithm">
 							</select>
 
 					</label>
-				</p>
-			</div>
-
-
-
-<!-- Key Ledger -->
-			<div>
-				<p>Key Ledger</p>
-				<p>
-					<input type="checkbox" id="enableKeyLedger">
-					Enable Key Ledger
-				</p>
-
-				<div class="pair">
-					<div class="key">
-						<label>Key Ledger URL</label>
-					</div>
-					<div class="value">
-						<input type="text" id="keyLedgerUrl" />
-					</div>
-				</div>
-
-				<div class="pair">
-					<div class="key">
-						<button id="verifyKeyLedger">
-							Verify Key Ledger
-						</button>
-					</div>
-					<div class="value">
-						<span id="keyLedgerVerified" title="">
-							Ledger not verified
-						</span>
-					</div>
-				</div>
-
-				<p class="disabled">
-					<label>
-						<input type="checkbox" id="autologinWhitelist" disabled/>
-						Use a new keypair every login
-					</label>
-				</p>
-
-			</div>
+			</p>
 		</div>
 
 
 
-<!-- Tools -->
+		<!-- Key Ledger -->
+		<div>
+			<p>Key Ledger</p>
+			<p>
+				<input type="checkbox" id="enableKeyLedger"> Enable Key Ledger
+			</p>
+
+			<div class="pair">
+				<div class="key">
+					<label>Key Ledger URL</label>
+				</div>
+				<div class="value">
+					<input type="text" id="keyLedgerUrl" />
+				</div>
+			</div>
+
+			<div class="pair">
+				<div class="key">
+					<button id="verifyKeyLedger">
+							Verify Key Ledger
+						</button>
+				</div>
+				<div class="value">
+					<span id="keyLedgerVerified" title="">
+							Ledger not verified
+						</span>
+				</div>
+			</div>
+
+			<p class="disabled">
+				<label>
+						<input type="checkbox" id="autologinWhitelist" disabled/>
+						Use a new keypair every login
+					</label>
+			</p>
+
+		</div>
+
+
+		<!-- Extras -->
+		<div>
+			<p>Extras</p>
+			<p>
+				<input type="checkbox" id="nightMode"> Night Mode
+			</p>
+
+			</div>
+
+			<!-- End of big Options div -->
+		</div>
+
+
+
+
+
+
+		<!-- Tools -->
 		<div class="tools container">
 			<p>Tools</p>
 
@@ -133,17 +148,11 @@
 						<button id="selectPublicKey">Copy Public Key</button>
 					</div>
 					<div class="value">
-						<span id="publicKey"
-							  title="Your public key is what identifies you
+						<span id="publicKey" title="Your public key is what identifies you
 							  to third parties"></span>
 					</div>
 				</div>
 			</div>
-
-
-
-
-
 
 			<div>
 				<p>Sign Message</p>
@@ -156,7 +165,7 @@
 					</div>
 				</div>
 
-<!-- Message Signature block -->
+				<!-- Message Signature block -->
 				<div class="pair">
 					<div class="key">
 						JWS (signed message)
@@ -169,7 +178,7 @@
 				</div>
 
 
-<!-- Copy Signature Button -->
+				<!-- Copy Signature Button -->
 				<div class="pair">
 					<div class="key">
 						<button id="selectSigned">
@@ -177,7 +186,7 @@
 						</button>
 					</div>
 				</div>
-<!-- Self Verify Signature Button -->
+				<!-- Self Verify Signature Button -->
 				<div class="pair">
 					<div class="key">
 						<button id="selfVerifyMessage">
@@ -263,8 +272,7 @@
 					New Key Pair
 				</p>
 				<p>
-					<strong>Warning</strong>: This will erase
-					the current key pair forever.
+					<strong>Warning</strong>: This will erase the current key pair forever.
 				</p>
 				<p>
 					<label>
@@ -282,16 +290,15 @@
 					Import key pair
 				</p>
 				<p>
-					<strong>Warning</strong>: This will erase
-					the current key pair forever.
+					<strong>Warning</strong>: This will erase the current key pair forever.
 				</p>
 				<p>
 					<label for='importPublicInput'> Public Key</label>
-					<input type="text" id="importPublicInput" value=""/>
+					<input type="text" id="importPublicInput" value="" />
 				</p>
 				<p>
 					<label for='importPrivateInput'>Private Key</label>
-					<input type="text" id="importPrivateInput" value=""/>
+					<input type="text" id="importPrivateInput" value="" />
 
 				</p>
 
@@ -330,5 +337,6 @@
 		<script src="/js/options.js"></script>
 		<script src="/js/crypto.js"></script>
 
-	</body>
+</body>
+
 </html>

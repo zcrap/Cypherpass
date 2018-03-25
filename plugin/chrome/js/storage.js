@@ -20,13 +20,19 @@ var cpd = function() {
 // values will be the initial settings.
 // The name (key) is what will be used to save in storage
 //
-// Default values are defined in **content.js**
+// FOR NEW OPTIONS:
+// Main data structure for storage is **cpd.prototype.presets**
+// Default values are defined in **content.js** as "defaults"
+// Option page action listening init is **optionPageInit()**
+// For persistent options option needs to be added to **restore_options()**
 cpd.prototype.presets = {
   // Keys
   privateKey: false,
   publicKey: false,
   // Crypto
   signatureAlgorithm:false,
+  // Extras
+  nightMode:false,
   // Plugin Settings
   autofill: true,
   autologinFill: true,

@@ -1,16 +1,29 @@
 // options.js is the javascript specifically for the options page.
 
+var nightStyle; 
+
 // Main start.
 // run only on the options page.
 if (document.title === "Cypherpass Options") {
-	optionPageInit();
+	initialize();
 }
+
 
 
 // initialize initilizes any empty options and
 // then restores option page with saved settings.
-function initialize() {
-	start(restore_options);
+function initialize(callback) {
+	console.log("initializing")
+	document.addEventListener('DOMContentLoaded', 
+	start(  function(items){
+		restore_options(items, 
+			function(){
+			console.log("calling actionInit");
+			actionInit();
+			}
+		)}
+	)
+	);
 }
 
 // refresh_gui updates the options page GUI to show the latest saved information
@@ -18,23 +31,61 @@ function refresh_gui(callback) {
 	restore_options(null, callback);
 }
 
+// restore_options set the values on the page back to the stored settings, items.
+//
+// FOR NEW OPTIONS:
+// Main data structure for storage is **cpd.prototype.presets**
+// Default values are defined in **content.js** as "defaults"
+// Option page action listening init is **actionInit()**
+// For persistent options option needs to be added to **restore_options()**
+// Must add value to **save_options** for it to actually save
 function restore_options(items, callback) {
 	// Get saved options first, then set GUI.
 	items = storage.get_saved(function(items) {
-		//Console log items here to see saved settings to console.
+
+		////////
+		// Autologin
+		////////
 		document.getElementById('autofill').checked = items.autofill;
 		$('#autologinFill').prop('checked', items.autologinFill);
 		$('#autologinSubmit').prop('checked', items.autologinSubmit);
 
-		document.getElementById('publicKey').textContent = JSON.stringify(items.publicKey);
+		////////
+		// Crypto
+		////////
+		// Signature algorithm
+		// First add supported algs to select box
+		addSigAlg();
+		// Set selected to saved.  If not saved, set to default.
+		if (items.signatureAlgorithm == "") {
+			console.log("Signature Algorithm not set.  Setting to default.");
+			items.signatureAlgorithm = defaults.alg;
+			console.log(items.signatureAlgorithm);
+		} else {
+			//console.log(items.signatureAlgorithm);
+			//Make sure it is supported.
+			if (supportedSignatureAlgorithms.indexOf(items.signatureAlgorithm) === -1) {
+				console.error("algorithm not suported.  Setting to default and saving.  ");
+				items.signatureAlgorithm = defaults.alg;
+				save_options();
 
-		//Key Ledger
+			}
+		}
+		$("#signatureAlgorithm").val(items.signatureAlgorithm);
+		
+		////////
+		// Key Ledger
+		////////
 		document.getElementById('enableKeyLedger').checked = items.enableKeyLedger;
 		document.getElementById('keyLedgerUrl').value = items.keyLedgerUrl;
 		setKeyLedgerVerified(items.keyLedgerVerified)
 
 		//$("#keyLedgerVerified").text();
 
+		////////
+		// Extras
+		///////
+		$('#nightMode').prop('checked', items.nightMode);
 
 		// Reset if showing private key.
 		var pricon = document.getElementById('privateKey').textContent;
@@ -44,6 +95,7 @@ function restore_options(items, callback) {
 			document.getElementById('privateKey').textContent = "";
 		}
 
+		document.getElementById('publicKey').textContent = JSON.stringify(items.publicKey);
 		// Reset signature
 		// Only sign if there is a value.
 		// Otherwise, ensure value is empty.
@@ -54,30 +106,10 @@ function restore_options(items, callback) {
 			document.getElementById('signature').textContent = "";
 		}
 
-		// Signature algorithm
-		// First add supported algs to select box
-		addSigAlg();
-		// Set selected to saved.  If not saved, set to default.
-		if (items.signatureAlgorithm == "") {
-			console.log("Signature Algorithm not set.  Setting to default.");
-			items.signatureAlgorithm = defaults.alg;
-			console.log(items.signatureAlgorithm);
-		} else {
-			console.log(items.signatureAlgorithm);
-			//Make sure it is supported.
-			if (supportedSignatureAlgorithms.indexOf(items.signatureAlgorithm) === -1) {
-				console.error("algorithm not suported.  Setting to default and saving.  ");
-				items.signatureAlgorithm = defaults.alg;
-				save_options();
-
-			}
-		}
-		$("#signatureAlgorithm").val(items.signatureAlgorithm);
-
-
 
 		//callback or return
 		if (typeof callback === 'function') {
+			console.log("calling callback")
 			return callback(items);
 		} else {
 			return items;
@@ -86,21 +118,36 @@ function restore_options(items, callback) {
 }
 
 
-
-
+// save_options saves the options for later.  
+//
+// FOR NEW OPTIONS:
+// Main data structure for storage is **cpd.prototype.presets**
+// Default values are defined in **content.js** as "defaults"
+// Option page action listening init is **actionInit()**
+// For persistent options option needs to be added to **restore_options()**
+// Must add value to **save_options** for it to actually save
 function save_options() {
 	console.log("saving settings");
 	var items = {};
-	//Cypherpass behavior.
+	// Autofill
 	items.autofill = $('#autofill').is(':checked');
 	items.autologinFill = $('#autologinFill').is(':checked');
 	items.autologinSubmit = $('#autologinSubmit').is(':checked');
+
+	// Crypto 
+	items.signatureAlgorithm = $("#signatureAlgorithm").val();
 
 	//Key Ledger
 	items.enableKeyLedger = $('#enableKeyLedger').is(':checked');
 	items.keyLedgerUrl = $("#keyLedgerUrl").attr("value")
 	items.keyLedgerVerified = $("#keyLedgerVerified").attr("value");
-	items.signatureAlgorithm = $("#signatureAlgorithm").val();
+
+	// Extras
+	items.nightMode = $("#nightMode").is(':checked');
+
+
+	// NOTE: Keys are saved at the time they are created.  
+
 
 	update_status('Saving....');
 
@@ -405,45 +452,74 @@ function selfVerify() {
 	option_verify_signature();
 }
 
+// Night mode toggles night mode
+function nightMode(callback){
+if ($('#nightMode').is(':checked')) {
+	console.log("true")
+	$('head').append(nightStyle);
+} else {
+	console.log("false")
+	$('#nightModeStyle').remove();
+	//nightStyle.remove();
+}
+
+if  (typeof callback === 'function') {
+	callback();
+}
+
+}
 
 
 
 
-// optionPageInit initializes the options page and restores settiongs
+
+// actionInit initializes the options page and restores settiongs
 // when document is loaded.
-function optionPageInit() {
-
-	//TODO loaded should happen, then everything else.
-	document.addEventListener('DOMContentLoaded', initialize);
+// 
+// FOR NEW OPTIONS:
+// Main data structure for storage is **cpd.prototype.presets**
+// Default values are defined in **content.js** as "defaults"
+// Option page action listening init is **optionPageInit()**
+// For persistent options option needs to be added to **restore_options()**
+function actionInit() {
 
 	///////////
 	// Auto save
 	////////
 	// Any item that should trigger a save should be below
-	document.getElementById('autofill').addEventListener("change", save_options);
-
+	$('#autofill').change(save_options)
 	$('#autologinFill').change(save_options);
 	$('#autologinSubmit').change(save_options);
 
+
+
+	/////////////
+	// Crypto
+	/////////////
+	// Select signature algorithm
+	$('#signatureAlgorithm').change(save_options);
+
+
+	/////////////
+	// Key Ledger
+	/////////////
 	document.getElementById('enableKeyLedger').addEventListener("change", save_options);
 	document.getElementById('keyLedgerUrl').addEventListener("input", save_options);
+
+	$("#verifyKeyLedger").click(key_ledger_verify);
 
 	//Select Public Key
 	$('#selectPublicKey').click(function() {
 		copyText('publicKey');
 	});
 
-	// Select signature algorithm
-	$('#signatureAlgorithm').change(save_options);
-
-
-
-
-	//////////////
-	//Key Ledger
 	/////////////
-
-	$("#verifyKeyLedger").click(key_ledger_verify);
+	// Extras
+	/////////////
+	//nightStyle = $('#nightModeStyle');
+	nightStyle = '<link rel="stylesheet" type="text/css" href="/css/options_night.css" id="nightModeStyle"/>'
+	$('#nightMode').change(function(){nightMode(save_options);});
+	nightMode();  // Make sure nightMode is set. 
 
 
 	// Sign message

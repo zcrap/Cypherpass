@@ -1,6 +1,9 @@
 // options.js is the javascript specifically for the options page.
 
-var nightStyle; 
+// Variables
+
+// nightStyle holds the style for toggling.  
+var nightStyle = '<link rel="stylesheet" type="text/css" href="/css/options_night.css" id="nightModeStyle"/>'; 
 
 // Main start.
 // run only on the options page.
@@ -18,7 +21,6 @@ function initialize(callback) {
 	start(  function(items){
 		restore_options(items, 
 			function(){
-			console.log("calling actionInit");
 			actionInit();
 			}
 		)}
@@ -37,7 +39,7 @@ function refresh_gui(callback) {
 // Main data structure for storage is **cpd.prototype.presets**
 // Default values are defined in **content.js** as "defaults"
 // Option page action listening init is **actionInit()**
-// For persistent options option needs to be added to **restore_options()**
+// Persistent options nees to be added to **restore_options()**
 // Must add value to **save_options** for it to actually save
 function restore_options(items, callback) {
 	// Get saved options first, then set GUI.
@@ -517,7 +519,7 @@ function actionInit() {
 	// Extras
 	/////////////
 	//nightStyle = $('#nightModeStyle');
-	nightStyle = '<link rel="stylesheet" type="text/css" href="/css/options_night.css" id="nightModeStyle"/>'
+
 	$('#nightMode').change(function(){nightMode(save_options);});
 	nightMode();  // Make sure nightMode is set. 
 
